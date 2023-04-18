@@ -166,9 +166,9 @@ public class Game {
                System.out.println("You ran out of tries! Secret Code was " + getOpponentSecretCode(RoleType.PLAYER));
             }
         }catch(NullPointerException e) {
-            System.out.println("Error Message: " + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }catch (Exception e) {
-            System.out.println("[Guess Secret Code] Error Message: " + e.getMessage());
+            System.out.println("[Guess Secret Code] Error: " + e.getMessage());
         }
     }
 
@@ -263,7 +263,7 @@ public class Game {
             }
             return new Result(guess, bulls, cows);
         } catch (NullPointerException e) {
-            System.out.println("[ScoreGuessResult] Error Message: " + e.getMessage());
+            System.out.println("[ScoreGuessResult] Error: " + e.getMessage());
         }
         return null;
     }
@@ -292,7 +292,7 @@ public class Game {
                 }
             }
         } catch (Exception e) {
-            System.out.println("[GetComputerAILevel] Error Message: " + e.getMessage());
+            System.out.println("[GetComputerAILevel] Error: " + e.getMessage());
         }
         return null;
     }
