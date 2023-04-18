@@ -44,6 +44,16 @@ public class Game {
     }
 
     /**
+     * return the value of attempt
+     *
+     * @return the value of attempts
+     */
+
+    public int getAttempts(){
+        return this.attempts;
+    }
+
+    /**
      * return the value of max attempts for each game
      *
      * @return the value of maximum attempts
@@ -170,6 +180,7 @@ public class Game {
 
         if (result != null) {
             StringBuilder resultMsg = new StringBuilder();
+            resultMsg.append("Turn "+ this.getAttempts()+":\n");
             resultMsg.append(subject + " guessed " + result.getGuess() + ", ");
             resultMsg.append("scoring " + result.getBullCount() + " bulls and");
             resultMsg.append(result.getCowCount() + " cows");
