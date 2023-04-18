@@ -138,34 +138,48 @@ public class Game {
 
     /**
      * guess opponent's secret code
-     * if player guess opponent's secret code correctly or max attempts is full, then game stops and return true
+     * if player or computer guess opponent's secret code correctly or max attempts is full, then game stops and return true
      * otherwise game continues, return false
      *
-     * @param roleType role type of
-     * @param guess    guess from player or computer
+     * @param playerGuess guess from player
      */
-    public void guessSecretCode(RoleType roleType, String guess) {
+    public void guessSecretCode(String playerGuess) {
         //TODO adjust logic to process computer's guess after player
         try {
-            RoleType opponentType = getOpponentType(roleType);
-            String opponentSecretCode = getOpponentSecretCode(opponentType);
-            Role role = getRole(roleType);
-            if (role != null) {
-                if (!isMaxAttemptsFull()) {
-                    Result result = scoreGuessResult(opponentSecretCode, guess);
-                    addAttempt();
-                    if (result != null) {
-                        printGuessResult(result, roleType);
-                    }
-                    if (!this.gameEnd && isMaxAttemptsFull()) {
-                        setGameEnd(true);
-                        System.out.println("You ran out of tries! Secret Code was " + opponentSecretCode);
-                    }
+            if(isMaxAttemptsFull()) return;
+            boolean isComputerGuess = isComputerGuess();
+            for(Role role : playerList){
+                if(role == null) continue;
+                String opponentSecretCode = getOpponentSecretCode(role.getType());
+                Result scoreResult = null;
+                if(role instanceof Player)
+                    scoreResult = scoreGuessResult(opponentSecretCode, playerGuess);
+                else if(role instanceof Computer && isComputerGuess){
+                    Computer computer = (Computer) role;
+                    scoreResult = scoreGuessResult(opponentSecretCode, computer.guessPlayerSecretCode());
                 }
+                printGuessResult(scoreResult, role.getType());
             }
-        } catch (Exception e) {
+            addAttempt();
+            if (!this.gameEnd && isMaxAttemptsFull()) {
+               setGameEnd(true);
+               System.out.println("You ran out of tries! Secret Code was " + getOpponentSecretCode(RoleType.PLAYER));
+            }
+        }catch(NullPointerException e) {
+            System.out.println("Error Message: " + e.getMessage());
+        }catch (Exception e) {
             System.out.println("[Guess Secret Code] Error Message: " + e.getMessage());
         }
+    }
+
+    /**
+     * check if computer needs to guess player's secret code
+     * EASYAI, MEDIUMAI, HARDAI computer need to guess player's secret code
+     * @return boolean value of computer guess
+     */
+    private boolean isComputerGuess(){
+        AILevel level = getComputerAILevel();
+        return !GameMode.WORDLE.equals(this.getGameMode()) && !AILevel.BEGINNER.equals(level);
     }
 
     /**
@@ -180,7 +194,7 @@ public class Game {
 
         if (result != null) {
             StringBuilder resultMsg = new StringBuilder();
-            resultMsg.append("Turn "+ this.getAttempts()+":\n");
+            resultMsg.append("Turn "+ (this.getAttempts()+1) +":\n");
             resultMsg.append(subject + " guessed " + result.getGuess() + ", ");
             resultMsg.append("scoring " + result.getBullCount() + " bulls and");
             resultMsg.append(result.getCowCount() + " cows");
@@ -193,27 +207,12 @@ public class Game {
     }
 
     /**
-     * get Role from playerList
-     *
-     * @param roleType role type of player/computer
-     * @return role current guesser
-     */
-    private Role getRole(RoleType roleType) {
-        for (Role role : playerList) {
-            if (role != null && roleType.equals(role.getType()))
-                return role;
-        }
-        return null;
-    }
-
-    /**
-     * get opponent's role type
-     *
-     * @param roleType role type of current guesser
+     * return opponent's role type
+     * @param roleType role Type of current guesser
      * @return opponent's role type
      */
-    private RoleType getOpponentType(RoleType roleType) {
-        switch (roleType) {
+    private RoleType getOpponentRoleType(RoleType roleType){
+        switch (roleType){
             case COMPUTER:
                 return RoleType.PLAYER;
             case PLAYER:
@@ -226,12 +225,18 @@ public class Game {
     /**
      * get opponent's secret code
      *
-     * @param roleType role type of current guesser
+     * @param roleType role type of opponent
      * @return opponent's secret code
      */
     private String getOpponentSecretCode(RoleType roleType) {
+        RoleType opponentType = null;
+        if(RoleType.COMPUTER.equals(roleType))
+            opponentType = RoleType.PLAYER;
+        else
+            opponentType = RoleType.COMPUTER;
+
         for (Role role : playerList) {
-            if (role != null && roleType.equals(role.getType()))
+            if (role != null && opponentType.equals(role.getType()))
                 return role.getSecretCode();
         }
         return null;

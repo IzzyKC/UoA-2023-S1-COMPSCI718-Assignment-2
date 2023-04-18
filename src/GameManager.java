@@ -190,7 +190,7 @@ public class GameManager {
     private void processPlayerGuess() {
         while (!game.isGameEnd()) {
             String guess = getUserGuess();
-            game.guessSecretCode(RoleType.PLAYER, guess);
+            game.guessSecretCode(guess);
             System.out.println("-----");
         }
     }
