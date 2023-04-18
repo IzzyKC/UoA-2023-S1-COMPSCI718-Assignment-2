@@ -39,9 +39,10 @@ public class Game {
     /**
      * after guess, the value of attempts plus 1
      */
-    private void addAttempt(){
+    private void addAttempt() {
         this.attempts++;
     }
+
     /**
      * return the value of max attempts for each game
      *
@@ -129,9 +130,9 @@ public class Game {
      * guess opponent's secret code
      * if player guess opponent's secret code correctly or max attempts is full, then game stops and return true
      * otherwise game continues, return false
-     * @param roleType role type of
-     * @param guess guess from player or computer
      *
+     * @param roleType role type of
+     * @param guess    guess from player or computer
      */
     public void guessSecretCode(RoleType roleType, String guess) {
         //TODO adjust logic to process computer's guess after player
@@ -139,14 +140,14 @@ public class Game {
             RoleType opponentType = getOpponentType(roleType);
             String opponentSecretCode = getOpponentSecretCode(opponentType);
             Role role = getRole(roleType);
-            if (role != null){
-                if(!isMaxAttemptsFull()) {
+            if (role != null) {
+                if (!isMaxAttemptsFull()) {
                     Result result = scoreGuessResult(opponentSecretCode, guess);
                     addAttempt();
-                    if(result != null){
+                    if (result != null) {
                         printGuessResult(result, roleType);
                     }
-                    if(!this.gameEnd && isMaxAttemptsFull()){
+                    if (!this.gameEnd && isMaxAttemptsFull()) {
                         setGameEnd(true);
                         System.out.println("You ran out of tries! Secret Code was " + opponentSecretCode);
                     }
@@ -160,20 +161,20 @@ public class Game {
     /**
      * print guess result
      */
-    private void printGuessResult(Result result, RoleType roleType){
+    private void printGuessResult(Result result, RoleType roleType) {
         String subject;
         if (roleType.equals(RoleType.PLAYER))
             subject = "You";
         else
             subject = "Computer";
 
-        if(result != null){
+        if (result != null) {
             StringBuilder resultMsg = new StringBuilder();
-            resultMsg.append(subject+" guessed "+result.getGuess()+", ");
-            resultMsg.append("scoring "+result.getBullCount()+" bulls and");
-            resultMsg.append(result.getCowCount()+" cows");
+            resultMsg.append(subject + " guessed " + result.getGuess() + ", ");
+            resultMsg.append("scoring " + result.getBullCount() + " bulls and");
+            resultMsg.append(result.getCowCount() + " cows");
             System.out.println(resultMsg);
-            if(result.getBullCount() == 4){
+            if (result.getBullCount() == 4) {
                 setGameEnd(true);
                 System.out.println(subject + " win! :)");
             }
@@ -230,7 +231,7 @@ public class Game {
      *
      * @return result of guess
      */
-    private Result scoreGuessResult(String secretCode, String guess){
+    private Result scoreGuessResult(String secretCode, String guess) {
         try {
             if (secretCode == null || secretCode.isBlank())
                 throw new NullPointerException("Input SecretCode is null");
@@ -245,8 +246,8 @@ public class Game {
                     cows++;
             }
             return new Result(guess, bulls, cows);
-        }catch(NullPointerException e){
-            System.out.println("[ScoreGuessResult] Error Message: "+ e.getMessage());
+        } catch (NullPointerException e) {
+            System.out.println("[ScoreGuessResult] Error Message: " + e.getMessage());
         }
         return null;
     }
@@ -254,6 +255,7 @@ public class Game {
     /**
      * if the maximum of game tries is full, return true
      * otherwise return false
+     *
      * @return the status of max attempts
      */
     private boolean isMaxAttemptsFull() {
@@ -265,21 +267,21 @@ public class Game {
      *
      * @return AI level
      */
-     public AILevel getComputerAILevel() {
-         try{
-             for(Role role : playerList){
-                 if(role instanceof Computer){
-                     Computer computer = (Computer) role;
-                     return computer.getLevel();
-                 }
-             }
-         }catch(Exception e){
-             System.out.println("[GetComputerAILevel] Error Message: "+e.getMessage());
-         }
-         return null;
-     }
+    public AILevel getComputerAILevel() {
+        try {
+            for (Role role : playerList) {
+                if (role instanceof Computer) {
+                    Computer computer = (Computer) role;
+                    return computer.getLevel();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("[GetComputerAILevel] Error Message: " + e.getMessage());
+        }
+        return null;
+    }
 
-     public void writeGameResultToFile(){
+    public void writeGameResultToFile() {
 
-     }
+    }
 }

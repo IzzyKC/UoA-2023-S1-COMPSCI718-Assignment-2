@@ -153,7 +153,6 @@ public class GameManager {
 
     /**
      * set up player Secret code if needed
-     *
      */
     private void setPlayerSecretCode() {
         if (game.getGameMode().equals(GameMode.BULLSANDCOWS) && !game.getComputerAILevel().equals(AILevel.BEGINNER)) {
@@ -174,9 +173,10 @@ public class GameManager {
      * process Use Guess
      */
     private void processPlayerGuess() {
-        while(!game.isGameEnd()){
-                String guess = getUserGuess();
-                game.guessSecretCode(RoleType.PLAYER, guess);
+        while (!game.isGameEnd()) {
+            String guess = getUserGuess();
+            game.guessSecretCode(RoleType.PLAYER, guess);
+            System.out.println("-----");
         }
     }
 

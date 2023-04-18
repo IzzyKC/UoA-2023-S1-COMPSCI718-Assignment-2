@@ -11,7 +11,7 @@ public class Result {
     /**
      * Constructor of result
      *
-     * @param guess value of guess
+     * @param guess     value of guess
      * @param bullCount value of bulls count
      * @param cowCount  value of cows count
      */
