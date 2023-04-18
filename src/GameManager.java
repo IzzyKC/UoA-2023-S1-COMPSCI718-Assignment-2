@@ -155,18 +155,33 @@ public class GameManager {
      * set up player Secret code if needed
      */
     private void setPlayerSecretCode() {
-        if (game.getGameMode().equals(GameMode.BULLSANDCOWS) && !game.getComputerAILevel().equals(AILevel.BEGINNER)) {
-            getPlayerSecretCode();
-        }
+        if((game.getGameMode().equals(GameMode.BULLSANDCOWS) && game.getComputerAILevel().equals(AILevel.BEGINNER)) ||
+                game.getGameMode().equals(GameMode.WORDLE))
+            return ;
+        String code = getPlayerSecretCode();
+        game.setSecretCodeByRole(RoleType.PLAYER, code);
+        System.out.println(">>>>>");
     }
 
     /**
      * prompt player to enter secret code
-     *
+     * Bulls and Cows : EasyAI, MediumAI and HARDAI need player to enter their secret code
+     * Otherwise, computer will generate random code at the beginning of the game
      * @return secretCode from player
      */
     private String getPlayerSecretCode() {
-        return null;
+        String code = null;
+        boolean isCodeValid = false;
+        while (!isCodeValid) {
+            System.out.println("Please Enter your secret code:");
+            code = Keyboard.readInput();
+            if (isDigitalCodeValid(code)) {
+                isCodeValid = true;
+            } else {
+                System.out.println("Your secret code is invalid! Please enter a number of non-repetitive 4 digits from 0-9!");
+            }
+        }
+        return code;
     }
 
     /**
@@ -190,13 +205,23 @@ public class GameManager {
         while (!isInputValid) {
             System.out.println("Enter your guess:");
             input = Keyboard.readInput();
-            if (input.matches("^(?:([0-9])(?!.*\\1)){4}")) {
+            if (isDigitalCodeValid(input)) {
                 isInputValid = true;
             } else {
                 System.out.println("Your guess is invalid! Please enter a number of non-repetitive 4 digits from 0-9!");
             }
         }
         return input;
+    }
+
+    /**
+     * check if format of the code is valid
+     *
+     * @param code non-repetitive 4-digits code from 0 to 9
+     * @return is code valid
+     */
+    private boolean isDigitalCodeValid(String code){
+        return code.matches("^(?:([0-9])(?!.*\\1)){4}");
     }
 
     /**

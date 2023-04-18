@@ -111,7 +111,7 @@ public class Game {
      * @param roleType   player role type
      * @param secretCode if needed
      */
-    private void setSecretCodeByRole(RoleType roleType, String secretCode) {
+    public void setSecretCodeByRole(RoleType roleType, String secretCode) {
         for (int i = 0; i < playerList.size(); i++) {
             if (playerList.get(i) != null && roleType.equals(playerList.get(i).getType())) {
                 playerList.get(i).processSecretCodeSetting(secretCode);
