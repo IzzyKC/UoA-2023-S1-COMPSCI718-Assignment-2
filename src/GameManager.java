@@ -155,9 +155,9 @@ public class GameManager {
      * set up player Secret code if needed
      */
     private void setPlayerSecretCode() {
-        if((game.getGameMode().equals(GameMode.BULLSANDCOWS) && game.getComputerAILevel().equals(AILevel.BEGINNER)) ||
+        if ((game.getGameMode().equals(GameMode.BULLSANDCOWS) && game.getComputerAILevel().equals(AILevel.BEGINNER)) ||
                 game.getGameMode().equals(GameMode.WORDLE))
-            return ;
+            return;
         String code = getPlayerSecretCode();
         game.setSecretCodeByRole(RoleType.PLAYER, code);
         System.out.println(">>>>>");
@@ -167,6 +167,7 @@ public class GameManager {
      * prompt player to enter secret code
      * Bulls and Cows : EasyAI, MediumAI and HARDAI need player to enter their secret code
      * Otherwise, computer will generate random code at the beginning of the game
+     *
      * @return secretCode from player
      */
     private String getPlayerSecretCode() {
@@ -220,7 +221,7 @@ public class GameManager {
      * @param code non-repetitive 4-digits code from 0 to 9
      * @return is code valid
      */
-    private boolean isDigitalCodeValid(String code){
+    private boolean isDigitalCodeValid(String code) {
         return code.matches("^(?:([0-9])(?!.*\\1)){4}");
     }
 
