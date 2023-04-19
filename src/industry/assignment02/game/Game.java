@@ -5,7 +5,7 @@ import industry.assignment02.player.*;
 import java.util.ArrayList;
 
 public class Game {
-    private ArrayList<Role> playerList;
+    private ArrayList<Role> roles;
     private GameMode gameMode;
     //private AILevel gameLevel;
     private int maxAttempts;
@@ -15,7 +15,7 @@ public class Game {
     private boolean gameEnd;
 
     public Game() {
-        this.playerList = new ArrayList<>();
+        this.roles = new ArrayList<>();
     }
 
     /**
@@ -84,7 +84,7 @@ public class Game {
      */
     public void init(AILevel level) {
         this.maxAttempts = (this.gameMode.equals(GameMode.BULLSANDCOWS)) ? 7 : 6;
-        createPlayerList(level);
+        createGameRoles(level);
         setUpComputerSecretCode();
 
     }
@@ -92,9 +92,9 @@ public class Game {
     /**
      * create player list:player and computer or AY by game mode and game level
      */
-    private void createPlayerList(AILevel level) {
-        playerList.add(new Player());
-        playerList.add(new Computer(level));
+    private void createGameRoles(AILevel level) {
+        roles.add(new Player());
+        roles.add(new Computer(level));
     }
 
     private void setUpComputerSecretCode() {
@@ -112,9 +112,9 @@ public class Game {
      * @param secretCode if needed
      */
     public void setSecretCodeByRole(RoleType roleType, String secretCode) {
-        for (int i = 0; i < playerList.size(); i++) {
-            if (playerList.get(i) != null && roleType.equals(playerList.get(i).getType())) {
-                playerList.get(i).processSecretCodeSetting(secretCode);
+        for (int i = 0; i < roles.size(); i++) {
+            if (roles.get(i) != null && roleType.equals(roles.get(i).getType())) {
+                roles.get(i).processSecretCodeSetting(secretCode);
             }
         }
     }
@@ -148,7 +148,7 @@ public class Game {
         try {
             if (isMaxAttemptsFull()) return;
             boolean isComputerGuess = isComputerGuess();
-            for (Role role : playerList) {
+            for (Role role : roles) {
                 if (role == null) continue;
                 String opponentSecretCode = getOpponentSecretCode(role.getType());
                 Result scoreResult = null;
@@ -237,7 +237,7 @@ public class Game {
         else
             opponentType = RoleType.COMPUTER;
 
-        for (Role role : playerList) {
+        for (Role role : roles) {
             if (role != null && opponentType.equals(role.getType()))
                 return role.getSecretCode();
         }
@@ -287,7 +287,7 @@ public class Game {
      */
     public AILevel getComputerAILevel() {
         try {
-            for (Role role : playerList) {
+            for (Role role : roles) {
                 if (role instanceof Computer) {
                     Computer computer = (Computer) role;
                     return computer.getLevel();
