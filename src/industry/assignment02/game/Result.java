@@ -4,6 +4,7 @@ package industry.assignment02.game;
  * store check result by guess
  */
 public class Result {
+    private String guesser;
     private String guess;
     private int bullCount;
     private int cowCount;
@@ -11,11 +12,13 @@ public class Result {
     /**
      * Constructor of result
      *
+     * @param guesser name of guesser
      * @param guess     value of guess
      * @param bullCount value of bulls count
      * @param cowCount  value of cows count
      */
-    public Result(String guess, int bullCount, int cowCount) {
+    public Result(String guesser, String guess, int bullCount, int cowCount) {
+        this.guesser = guesser;
         this.guess = guess;
         this.bullCount = bullCount;
         this.cowCount = cowCount;
@@ -73,5 +76,33 @@ public class Result {
      */
     public void setCowCount(int cowCount) {
         this.cowCount = cowCount;
+    }
+
+    /**
+     * return the value of guesser
+     *
+     * @return value of guesser
+     */
+
+    public String getGuesser() {
+        return guesser;
+    }
+
+    /**
+     * set the value of guesser
+     *
+     * @param guesser value of guesser
+     */
+    public void setGuesser(String guesser) {
+        this.guesser = guesser;
+    }
+
+    /**
+     * return the String of guess result
+     *
+     * @return String
+     */
+    public String toString() {
+        return guesser + " guessed " + guess + ", scoring " + bullCount + " bulls and " + cowCount + "cows";
     }
 }

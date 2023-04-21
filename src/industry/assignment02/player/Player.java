@@ -1,22 +1,24 @@
 package industry.assignment02.player;
 
-public class Player extends Role {
+public class Player{
+    private String playerCode;
     /**
-     * Returns the type of the player.
+     * Returns the value of player secret code.
      *
-     * @return type of player.
+     * @return playerCode the value of player secret code.
      */
-    @Override
-    public RoleType getType() {
-        return RoleType.PLAYER;
+    public String getPlayerCode() {
+        return playerCode;
     }
 
     /**
-     * set up player secret code.
+     * set the value of playerCode
+     *
+     * @param playerCode the value of player secret code
      */
-    @Override
-    public void processSecretCodeSetting(String playerSecretCode) {
-        setSecretCode(playerSecretCode);
+    public void setPlayerCode(String playerCode) {
+        this.playerCode = playerCode;
     }
+
 
 }

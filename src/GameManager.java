@@ -1,7 +1,6 @@
 import industry.assignment02.game.Game;
 import industry.assignment02.game.GameMode;
 import industry.assignment02.player.AILevel;
-import industry.assignment02.player.RoleType;
 
 public class GameManager {
     enum Command {SET_PLAYER_SECRET_CODE, PROCESS_PLAYER_GUESS, WRITE_RESULT_TO_FILE}
@@ -155,11 +154,9 @@ public class GameManager {
      * set up player Secret code if needed
      */
     private void setPlayerSecretCode() {
-        if ((game.getGameMode().equals(GameMode.BULLSANDCOWS) && game.getComputerAILevel().equals(AILevel.BEGINNER)) ||
-                game.getGameMode().equals(GameMode.WORDLE))
-            return;
+        if(!game.isInterActiveMode()) return;
         String code = getPlayerSecretCode();
-        game.setSecretCodeByRole(RoleType.PLAYER, code);
+        game.setUpPlayerCode(code);
         System.out.println(">>>>>");
     }
 
@@ -191,7 +188,7 @@ public class GameManager {
     private void processPlayerGuess() {
         while (!game.isGameEnd()) {
             String guess = getUserGuess();
-            game.guessSecretCode(guess);
+            game.guessSecretCodes(guess);
             System.out.println("-----");
         }
     }

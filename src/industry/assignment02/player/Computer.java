@@ -1,41 +1,42 @@
 package industry.assignment02.player;
 
-public class Computer extends Role {
-    private AILevel level;
-
-    public Computer(AILevel level) {
-        this.level = level;
-    }
-
-    public AILevel getLevel() {
-        return level;
-    }
-
-    public void setLevel(AILevel level) {
-        this.level = level;
-    }
+public abstract class Computer{
+    private AILevel aiLevel;
+    private String computerCode;
 
     /**
-     * Returns the type of the computer.
+     * Returns the value of secretCode.
      *
-     * @return type of computer.
+     * @return secretCode.
      */
-    @Override
-    public RoleType getType() {
-        return RoleType.COMPUTER;
+    public String getComputerCode() {
+        return computerCode;
     }
 
     /**
-     * set up computer secret code.
-     * if the input of secretCode is null, then generate a random code
+     * Returns the value of AILevel.
+     *
+     * @return AILevel.
+     */
+    public AILevel getAiLevel() {
+        return aiLevel;
+    }
+
+    /**
+     * set the value of AILevel
+     *
+     * @param aiLevel the value of AiLevel
+     */
+    public void setAiLevel(AILevel aiLevel) {
+        this.aiLevel = aiLevel;
+    }
+
+    /**
+     * generate random computer secret code automatically.
      * The code is 4 digits from 0 – 9 and non-repetitive
      */
-    @Override
-    public void processSecretCodeSetting(String computerSecretCode) {
-        if (computerSecretCode == null || computerSecretCode.isEmpty()) {
-            computerSecretCode = genRandomCode(4, false);
-        }
-        setSecretCode(computerSecretCode);
+    public void genComputerCode() {
+        computerCode = genRandomCode(4, false);
     }
 
     /**
@@ -69,19 +70,28 @@ public class Computer extends Role {
         return (int) (Math.random() * 10);
     }
 
-    public String guessPlayerSecretCode() {
+    public String genWordleCode(){
         return null;
     }
 
-    private String guessWithEasyAI() {
+    /**
+     * set five-letter word of wordle
+     */
+    private void SetWordleSecretWord() {
+        getWordleSecretWordFromFile();
+    }
+
+    /**
+     * set up wordle five-letter word from dictionary.txt
+     * format: five letters and contains only letters A - Z or a - z
+     *
+     * @return wordle secret word
+     */
+    private String getWordleSecretWordFromFile() {
         return null;
     }
 
-    private String guessWithMediumAI() {
-        return null;
-    }
+    public abstract String guessPlayerCode();
 
-    private String guessWithHardAI() {
-        return null;
-    }
+
 }

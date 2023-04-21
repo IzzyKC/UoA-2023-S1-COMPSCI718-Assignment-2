@@ -1,11 +1,12 @@
 package industry.assignment02.game;
 
 import industry.assignment02.player.*;
-
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Game {
-    private ArrayList<Role> roles;
+    private Player player;
+    private Computer computer;
     private GameMode gameMode;
     //private AILevel gameLevel;
     private int maxAttempts;
@@ -15,7 +16,7 @@ public class Game {
     private boolean gameEnd;
 
     public Game() {
-        this.roles = new ArrayList<>();
+        player = new Player();
     }
 
     /**
@@ -43,34 +44,6 @@ public class Game {
         this.attempts++;
     }
 
-    /**
-     * return the value of attempt
-     *
-     * @return the value of attempts
-     */
-
-    public int getAttempts() {
-        return this.attempts;
-    }
-
-    /**
-     * return the value of max attempts for each game
-     *
-     * @return the value of maximum attempts
-     */
-    public int getMaxAttempts() {
-        return this.maxAttempts;
-    }
-
-    /**
-     * set the value of max attempts for each game
-     *
-     * @param maxAttempts maximum of attempts
-     */
-    public void setMaxAttempts(int maxAttempts) {
-        this.maxAttempts = maxAttempts;
-    }
-
     public boolean isGameEnd() {
         return this.gameEnd;
     }
@@ -84,56 +57,44 @@ public class Game {
      */
     public void init(AILevel level) {
         this.maxAttempts = (this.gameMode.equals(GameMode.BULLSANDCOWS)) ? 7 : 6;
-        createGameRoles(level);
-        setUpComputerSecretCode();
+        createComputer(level);
+        setUpComputerCode();
 
     }
 
     /**
-     * create player list:player and computer or AY by game mode and game level
+     * create player list:player and computer by game mode and game level
+     * MediumAI and HardAI must create corresponding computer role
+     * otherwiese, create EasyAI
      */
-    private void createGameRoles(AILevel level) {
-        roles.add(new Player());
-        roles.add(new Computer(level));
+    private void createComputer(AILevel level) {
+        if (AILevel.MEDIUMAI.equals(level))
+            computer = new MediumAI(level);
+        else if (AILevel.HARDAI.equals(level))
+            computer = new HardAI(level);
+        else
+            computer = new EasyAI(level);
     }
 
-    private void setUpComputerSecretCode() {
+    /**
+     * set up computer secret code
+     */
+    private void setUpComputerCode() {
+        if (computer == null) return;
         if (this.gameMode.equals(GameMode.BULLSANDCOWS))
-            setSecretCodeByRole(RoleType.COMPUTER, null);
+            computer.genComputerCode();
         else
-            SetWordleSecretWord();
+            computer.genWordleCode();
     }
 
 
     /**
      * set up player secret code
      *
-     * @param roleType   player role type
-     * @param secretCode if needed
+     * @param playerCode secret code entered by player
      */
-    public void setSecretCodeByRole(RoleType roleType, String secretCode) {
-        for (int i = 0; i < roles.size(); i++) {
-            if (roles.get(i) != null && roleType.equals(roles.get(i).getType())) {
-                roles.get(i).processSecretCodeSetting(secretCode);
-            }
-        }
-    }
-
-    /**
-     * set five-letter word of wordle
-     */
-    private void SetWordleSecretWord() {
-        getWordleSecretWordFromFile();
-    }
-
-    /**
-     * set up wordle five-letter word from dictionary.txt
-     * format: five letters and contains only letters A - Z or a - z
-     *
-     * @return wordle secret word
-     */
-    private String getWordleSecretWordFromFile() {
-        return null;
+    public void setUpPlayerCode(String playerCode) {
+        player.setPlayerCode(playerCode);
     }
 
     /**
@@ -143,27 +104,30 @@ public class Game {
      *
      * @param playerGuess guess from player
      */
-    public void guessSecretCode(String playerGuess) {
+    public void guessSecretCodes(String playerGuess) {
         //TODO adjust logic to process computer's guess after player
         try {
             if (isMaxAttemptsFull()) return;
-            boolean isComputerGuess = isComputerGuess();
-            for (Role role : roles) {
-                if (role == null) continue;
-                String opponentSecretCode = getOpponentSecretCode(role.getType());
-                Result scoreResult = null;
-                if (role instanceof Player)
-                    scoreResult = scoreGuessResult(opponentSecretCode, playerGuess);
-                else if (role instanceof Computer && isComputerGuess) {
-                    Computer computer = (Computer) role;
-                    scoreResult = scoreGuessResult(opponentSecretCode, computer.guessPlayerSecretCode());
-                }
-                printGuessResult(scoreResult, role.getType());
+            Map<String, Result> resultMap = new HashMap<>();
+            Result result;
+            result = scoreGuessResult("You", computer.getComputerCode(), playerGuess);
+            resultMap.put(player.getClass().getSimpleName(), result);
+            if (isInterActiveMode()) {
+                String computerGuess;
+                if (computer instanceof EasyAI)
+                    computerGuess = ((EasyAI) computer).guessWithAIStrategy();
+                else if (computer instanceof MediumAI)
+                    computerGuess = ((MediumAI) computer).guessWithAIStrategy();
+                else
+                    computerGuess = ((HardAI) computer).guessWithAIStrategy();
+                result = scoreGuessResult("Computer", player.getPlayerCode(), computerGuess);
+                resultMap.put(computer.getClass().getSimpleName(), result);
             }
             addAttempt();
+            printGuessResult(resultMap);
             if (!this.gameEnd && isMaxAttemptsFull()) {
                 setGameEnd(true);
-                System.out.println("You ran out of tries! Secret Code was " + getOpponentSecretCode(RoleType.PLAYER));
+                System.out.println("You ran out of tries! Secret Code was " + computer.getComputerCode());
             }
         } catch (NullPointerException e) {
             System.out.println("Error: " + e.getMessage());
@@ -178,70 +142,25 @@ public class Game {
      *
      * @return boolean value of computer guess
      */
-    private boolean isComputerGuess() {
-        AILevel level = getComputerAILevel();
-        return !GameMode.WORDLE.equals(this.getGameMode()) && !AILevel.BEGINNER.equals(level);
+    public boolean isInterActiveMode() {
+        AILevel level = computer.getAiLevel();
+        return AILevel.EASYAI.equals(level) || AILevel.MEDIUMAI.equals(level) || AILevel.HARDAI.equals(level);
     }
 
     /**
      * print guess result
      */
-    private void printGuessResult(Result result, RoleType roleType) {
-        String subject;
-        if (roleType.equals(RoleType.PLAYER))
-            subject = "You";
-        else
-            subject = "Computer";
-
-        if (result != null) {
-            StringBuilder resultMsg = new StringBuilder();
-            resultMsg.append("Turn " + (this.getAttempts() + 1) + ":\n");
-            resultMsg.append(subject + " guessed " + result.getGuess() + ", ");
-            resultMsg.append("scoring " + result.getBullCount() + " bulls and");
-            resultMsg.append(result.getCowCount() + " cows");
-            System.out.println(resultMsg);
+    private void printGuessResult(Map<String, Result> resultMap) {
+        if (resultMap.size() == 0) return;
+        System.out.println("Turn " + this.attempts+":");
+        for(Map.Entry<String, Result> entry : resultMap.entrySet()){
+            Result result = entry.getValue();
+            System.out.println(result);
             if (result.getBullCount() == 4) {
                 setGameEnd(true);
-                System.out.println(subject + " win! :)");
+                System.out.println(result.getGuesser() + " win! :)");
             }
         }
-    }
-
-    /**
-     * return opponent's role type
-     *
-     * @param roleType role Type of current guesser
-     * @return opponent's role type
-     */
-    private RoleType getOpponentRoleType(RoleType roleType) {
-        switch (roleType) {
-            case COMPUTER:
-                return RoleType.PLAYER;
-            case PLAYER:
-                return RoleType.COMPUTER;
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * get opponent's secret code
-     *
-     * @param roleType role type of opponent
-     * @return opponent's secret code
-     */
-    private String getOpponentSecretCode(RoleType roleType) {
-        RoleType opponentType = null;
-        if (RoleType.COMPUTER.equals(roleType))
-            opponentType = RoleType.PLAYER;
-        else
-            opponentType = RoleType.COMPUTER;
-
-        for (Role role : roles) {
-            if (role != null && opponentType.equals(role.getType()))
-                return role.getSecretCode();
-        }
-        return null;
     }
 
     /**
@@ -249,7 +168,7 @@ public class Game {
      *
      * @return result of guess
      */
-    private Result scoreGuessResult(String secretCode, String guess) {
+    private Result scoreGuessResult(String guesser, String secretCode, String guess) {
         try {
             if (secretCode == null || secretCode.isBlank())
                 throw new NullPointerException("Input SecretCode is null");
@@ -263,7 +182,7 @@ public class Game {
                 else if (index >= 0)
                     cows++;
             }
-            return new Result(guess, bulls, cows);
+            return new Result(guesser, guess, bulls, cows);
         } catch (NullPointerException e) {
             System.out.println("[ScoreGuessResult] Error: " + e.getMessage());
         }
@@ -278,25 +197,6 @@ public class Game {
      */
     private boolean isMaxAttemptsFull() {
         return this.attempts == this.maxAttempts;
-    }
-
-    /**
-     * return the value of AI level from Computer
-     *
-     * @return AI level
-     */
-    public AILevel getComputerAILevel() {
-        try {
-            for (Role role : roles) {
-                if (role instanceof Computer) {
-                    Computer computer = (Computer) role;
-                    return computer.getLevel();
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("[GetComputerAILevel] Error: " + e.getMessage());
-        }
-        return null;
     }
 
     public void writeGameResultToFile() {
