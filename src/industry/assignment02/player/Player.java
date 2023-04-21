@@ -1,24 +1,10 @@
 package industry.assignment02.player;
 
-public class Player{
-    private String playerCode;
-    /**
-     * Returns the value of player secret code.
-     *
-     * @return playerCode the value of player secret code.
-     */
-    public String getPlayerCode() {
-        return playerCode;
-    }
+import industry.assignment02.game.Result;
 
-    /**
-     * set the value of playerCode
-     *
-     * @param playerCode the value of player secret code
-     */
-    public void setPlayerCode(String playerCode) {
-        this.playerCode = playerCode;
-    }
+import java.util.ArrayList;
+import java.util.List;
 
+public class Player extends Role {
 
 }

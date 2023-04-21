@@ -108,8 +108,6 @@ public class GameManager {
 
         while (true) {
             String input = Keyboard.readInput().toLowerCase();
-
-            //when user enter the actual name , return corresponding value
             switch (input) {
                 case "singleplayer":
                     return AILevel.BEGINNER;
@@ -153,8 +151,8 @@ public class GameManager {
     /**
      * set up player Secret code if needed
      */
-    private void setPlayerSecretCode() {
-        if(!game.isInterActiveMode()) return;
+    private void processPlayerCodeSetup() {
+        if (!game.isInterActiveMode()) return;
         String code = getPlayerSecretCode();
         game.setUpPlayerCode(code);
         System.out.println(">>>>>");
@@ -230,14 +228,14 @@ public class GameManager {
     }
 
     /**
-     * Parses a string into a command plus arguments and executes them.
+     * pass command and executes them.
      *
      * @param cmd The string to be parsed
      */
     private void passCommand(Command cmd) {
         switch (cmd) {
             case SET_PLAYER_SECRET_CODE:
-                setPlayerSecretCode();
+                processPlayerCodeSetup();
             case PROCESS_PLAYER_GUESS:
                 processPlayerGuess();
             case WRITE_RESULT_TO_FILE:

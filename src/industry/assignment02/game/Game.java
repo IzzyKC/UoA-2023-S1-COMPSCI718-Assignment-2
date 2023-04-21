@@ -1,8 +1,9 @@
 package industry.assignment02.game;
 
 import industry.assignment02.player.*;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
     private Player player;
@@ -56,7 +57,7 @@ public class Game {
      * initialize a new game: set up max attempts, create game; players
      */
     public void init(AILevel level) {
-        this.maxAttempts = (this.gameMode.equals(GameMode.BULLSANDCOWS)) ? 7 : 6;
+        maxAttempts = (gameMode.equals(GameMode.BULLSANDCOWS)) ? 7 : 6;
         createComputer(level);
         setUpComputerCode();
 
@@ -94,41 +95,33 @@ public class Game {
      * @param playerCode secret code entered by player
      */
     public void setUpPlayerCode(String playerCode) {
-        player.setPlayerCode(playerCode);
+        player.setSecretCode(playerCode);
     }
 
     /**
      * guess opponent's secret code
      * if player or computer guess opponent's secret code correctly or max attempts is full, then game stops and return true
      * otherwise game continues, return false
+     * after all guesses execute successfully, attempt number plus 1
      *
      * @param playerGuess guess from player
      */
     public void guessSecretCodes(String playerGuess) {
-        //TODO adjust logic to process computer's guess after player
         try {
             if (isMaxAttemptsFull()) return;
-            Map<String, Result> resultMap = new HashMap<>();
-            Result result;
-            result = scoreGuessResult("You", computer.getComputerCode(), playerGuess);
-            resultMap.put(player.getClass().getSimpleName(), result);
+            List<Result> results = new ArrayList<>();
+            Result playerResult = scoreGuessResult("You", computer.getSecretCode(), playerGuess);
+            player.getGuessResults().add(playerResult);
+            results.add(playerResult);
             if (isInterActiveMode()) {
                 String computerGuess;
-                if (computer instanceof EasyAI)
-                    computerGuess = ((EasyAI) computer).guessWithAIStrategy();
-                else if (computer instanceof MediumAI)
-                    computerGuess = ((MediumAI) computer).guessWithAIStrategy();
-                else
-                    computerGuess = ((HardAI) computer).guessWithAIStrategy();
-                result = scoreGuessResult("Computer", player.getPlayerCode(), computerGuess);
-                resultMap.put(computer.getClass().getSimpleName(), result);
+                computerGuess = computer.guessPlayerCode();
+                Result computerResult = scoreGuessResult("Computer", player.getSecretCode(), computerGuess);
+                computer.getGuessResults().add(computerResult);
+                results.add(computerResult);
             }
             addAttempt();
-            printGuessResult(resultMap);
-            if (!this.gameEnd && isMaxAttemptsFull()) {
-                setGameEnd(true);
-                System.out.println("You ran out of tries! Secret Code was " + computer.getComputerCode());
-            }
+            printGuessResult(results);
         } catch (NullPointerException e) {
             System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
@@ -150,16 +143,25 @@ public class Game {
     /**
      * print guess result
      */
-    private void printGuessResult(Map<String, Result> resultMap) {
-        if (resultMap.size() == 0) return;
-        System.out.println("Turn " + this.attempts+":");
-        for(Map.Entry<String, Result> entry : resultMap.entrySet()){
-            Result result = entry.getValue();
+    private void printGuessResult(List<Result> results) {
+        if (results.size() == 0)
+            throw new NullPointerException("No guess Result to be print!");
+        System.out.println("Turn " + this.attempts + ":");
+        for (Result result : results) {
             System.out.println(result);
             if (result.getBullCount() == 4) {
                 setGameEnd(true);
                 System.out.println(result.getGuesser() + " win! :)");
+                return;
             }
+        }
+        if (!this.gameEnd && isMaxAttemptsFull()) {
+            setGameEnd(true);
+            if (isInterActiveMode())
+                System.out.println(this.maxAttempts + " tries is full!\nResult is a draw. Secret Code was "
+                        + computer.getSecretCode());
+            else
+                System.out.println("You ran out of tries! Secret Code was " + computer.getSecretCode());
         }
     }
 
@@ -171,9 +173,9 @@ public class Game {
     private Result scoreGuessResult(String guesser, String secretCode, String guess) {
         try {
             if (secretCode == null || secretCode.isBlank())
-                throw new NullPointerException("Input SecretCode is null");
+                throw new NullPointerException(guesser + " SecretCode is NULL!");
             if (guess == null || guess.isBlank())
-                throw new NullPointerException("Input guess is null");
+                throw new NullPointerException(guesser + " Guess is NULL!");
             int bulls = 0, cows = 0;
             for (int i = 0; i < guess.length(); i++) {
                 int index = secretCode.indexOf(guess.charAt(i));

@@ -1,17 +1,7 @@
 package industry.assignment02.player;
 
-public abstract class Computer{
+public abstract class Computer extends Role{
     private AILevel aiLevel;
-    private String computerCode;
-
-    /**
-     * Returns the value of secretCode.
-     *
-     * @return secretCode.
-     */
-    public String getComputerCode() {
-        return computerCode;
-    }
 
     /**
      * Returns the value of AILevel.
@@ -36,7 +26,7 @@ public abstract class Computer{
      * The code is 4 digits from 0 – 9 and non-repetitive
      */
     public void genComputerCode() {
-        computerCode = genRandomCode(4, false);
+        super.setSecretCode(genRandomCode(4, false));
     }
 
     /**
@@ -48,9 +38,9 @@ public abstract class Computer{
     public String genRandomCode(int length, boolean allowRepeatedDigit) {
         String code = "";
         for (int i = 0; i < length; i++) {
-            String digit = String.valueOf(getRandomDigit());
+            String digit = String.valueOf(getRandomDigit(0, 9));
             while ((!allowRepeatedDigit && code.contains(digit))) {
-                String newDigit = String.valueOf(getRandomDigit());
+                String newDigit = String.valueOf(getRandomDigit(0, 9));
                 if (!code.contains(newDigit)) {
                     digit = newDigit;
                     break;
@@ -66,11 +56,15 @@ public abstract class Computer{
      *
      * @return int from 0 to 9
      */
-    private int getRandomDigit() {
-        return (int) (Math.random() * 10);
+    private int getRandomDigit(int min, int max) {
+        return (int) (Math.random() * (max - min + 1));
     }
 
-    public String genWordleCode(){
+    public String genWordleCode() {
+        return null;
+    }
+
+    public String genWordleGuess() {
         return null;
     }
 
