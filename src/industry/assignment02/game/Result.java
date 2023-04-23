@@ -105,4 +105,22 @@ public class Result {
     public String toString() {
         return guesser + " guessed " + guess + ", scoring " + bullCount + " bulls and " + cowCount + " cows";
     }
+
+    /**
+     * prints winner message
+     *
+     * @return winner message
+     */
+    public String printWinnerMessage() {
+        return guesser.equals("You") ? "Congratulations! You win! :)" : "Sorry! Computer Win :(";
+    }
+
+    /**
+     * check if this guess is correct when bullsCount == 4
+     *
+     * @return is guess match secret code correctly
+     */
+    public boolean isGuessCorrect() {
+        return (bullCount == 4);
+    }
 }

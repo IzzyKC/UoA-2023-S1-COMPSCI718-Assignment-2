@@ -125,7 +125,7 @@ public class Game {
             if (!gameEnd && isMaxAttemptsFull()) {
                 setGameEnd(true);
                 if (isInterActiveMode())
-                    System.out.println("Sorry! " + maxAttempts + " tries is full!\nResult is a draw. Secret Code was "
+                    System.out.println("Sorry, " + maxAttempts + " tries is full!\nResult is a draw. Secret Code was "
                             + computer.getSecretCode());
                 else
                     System.out.println("You ran out of tries! Secret Code was " + computer.getSecretCode());
@@ -156,9 +156,9 @@ public class Game {
         if (result == null)
             throw new NullPointerException("There is no guess Result to be print!");
         System.out.println(result);
-        if (result.getBullCount() == 4) {
+        if (result.isGuessCorrect()) {
             setGameEnd(true);
-            System.out.println(result.getGuesser().equals("You") ? "Congratulations! You win! :)" : "Sorry! Computer Win :(");
+            System.out.println(result.printWinnerMessage());
         }
     }
 
@@ -198,15 +198,40 @@ public class Game {
         return this.attempts == this.maxAttempts;
     }
 
+    /**
+     * saves game result to a text file
+     *
+     * @param fileName fileName entered by player
+     */
     public void writeResultToTxtFile(String fileName) {
-        try(PrintWriter writer = new PrintWriter(new FileWriter(fileName))){
-            writer.printf("%s", GameMode.BULLSANDCOWS.equals(gameMode) ? "Bulls & Cows" : "Wordle" + " game result.");
-            if(isInterActiveMode())
-                writer.printf("%s", "Your code: " + player.getSecretCode());
-            writer.printf("%s", "Computer's code: " + computer.getSecretCode());
-        }catch(IOException e){
-            System.out.println("Error:　"+e.getMessage());
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+            writer.printf("%s\n", (GameMode.BULLSANDCOWS.equals(gameMode) ? "Bulls & Cows" : "Wordle") + " game result.");
+            if (isInterActiveMode())
+                writer.printf("%s\n", "Your code: " + player.getSecretCode());
+            writer.printf("%s\n", "Computer's code: " + computer.getSecretCode());
+            int i = 0;
+            while (i < player.getGuessResults().size()) {
+                writer.print("---\n");
+                writer.printf("%s\n", "Turn " + (i + 1) + ":");
+                Result playerResult = player.getGuessResults().get(i);
+                writer.printf("%s\n", playerResult.toString());
+                if (playerResult.isGuessCorrect())
+                    writer.printf("%s\n", playerResult.printWinnerMessage());
+                if (i >= computer.getGuessResults().size()) break;
+                Result computerResult = computer.getGuessResults().get(i);
+                writer.printf("%s\n", computerResult.toString());
+                if (computerResult.isGuessCorrect())
+                    writer.printf("%s\n", computerResult.printWinnerMessage());
+                if (i == (player.getGuessResults().size()-1) &&
+                        playerResult.getBullCount() != 4 && computerResult.getBullCount() !=4) {
+                    writer.print(">>>\n");
+                    writer.printf("%s", maxAttempts + " tries is full. Result is a draw.");
+                }
+                i++;
+            }
+            System.out.println("Game Result saved successfully to " + fileName + "!");
+        } catch (IOException e) {
+            System.out.println("Error:　" + e.getMessage());
         }
-
     }
 }

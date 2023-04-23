@@ -37,7 +37,6 @@ public class GameManager {
             game.init(gameLevel);
             passCommand(Command.SET_PLAYER_SECRET_CODE);
             passCommand(Command.PROCESS_PLAYER_GUESS);
-            //TODO ask player if he wants to  save game result to file or not
             passCommand(Command.WRITE_RESULT_TO_FILE);
             printExitMessage();
         } catch (Exception e) {
@@ -187,8 +186,8 @@ public class GameManager {
     private void processPlayerGuess() {
         while (!game.isGameEnd()) {
             String guess = getUserGuess();
-            game.guessSecretCodes(guess);
             System.out.println("-----");
+            game.guessSecretCodes(guess);
         }
     }
 
@@ -233,12 +232,13 @@ public class GameManager {
      *
      */
     private void processWriteToTxtFile(){
-
+        System.out.println(">>>");
         System.out.println("If you want to save this game result to a file, please enter a file name: ");
         System.out.print("Hint : Type a file name, or just press ENTER to quit: ");
         String fileName = Keyboard.readInput();
-        if(!fileName.isBlank())
-            game.writeResultToTxtFile(fileName);
+        if (fileName.isBlank()) return;
+        game.writeResultToTxtFile(fileName + ".txt");
+
     }
 
     /**
@@ -247,15 +247,19 @@ public class GameManager {
      * @param cmd The string to be parsed
      */
     private void passCommand(Command cmd) {
-        switch (cmd) {
+        switch (cmd){
             case SET_PLAYER_SECRET_CODE:
                 processPlayerCodeSetup();
+                break;
             case PROCESS_PLAYER_GUESS:
                 processPlayerGuess();
+                break;
             case WRITE_RESULT_TO_FILE:
                 processWriteToTxtFile();
+                break;
+            default:
+                System.out.println("No command is coming in!");
         }
-
     }
 
 }
