@@ -32,7 +32,7 @@ public abstract class Computer extends Role{
     /**
      * generate random digital code
      *
-     * @param length             length of secretCode
+     * @param length length of secretCode
      * @param allowRepeatedDigit code can include repeat digit or not
      */
     public String genRandomCode(int length, boolean allowRepeatedDigit) {
@@ -56,7 +56,7 @@ public abstract class Computer extends Role{
      *
      * @return int from 0 to 9
      */
-    private int getRandomDigit(int min, int max) {
+    public int getRandomDigit(int min, int max) {
         return (int) (Math.random() * (max - min + 1));
     }
 

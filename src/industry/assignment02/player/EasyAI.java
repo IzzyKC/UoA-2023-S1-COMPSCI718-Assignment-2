@@ -11,7 +11,9 @@ public class EasyAI extends Computer {
     }
 
     /**
-     EasyAI guesses player's secret by different AI Level
+     * EasyAI guesses player's secret by different AI Level
+     * EASYAI : generates random non-repetitive 4 digits
+     * Wordle :
      *
      * @return computer's random guess
      */

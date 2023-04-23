@@ -181,7 +181,8 @@ public class GameManager {
     }
 
     /**
-     * process Use Guess
+     * process player Guess
+     * prompt player to enter secret code and check input is valid
      */
     private void processPlayerGuess() {
         while (!game.isGameEnd()) {
@@ -228,6 +229,19 @@ public class GameManager {
     }
 
     /**
+     * process writing game result to txt file
+     *
+     */
+    private void processWriteToTxtFile(){
+
+        System.out.println("If you want to save this game result to a file, please enter a file name: ");
+        System.out.print("Hint : Type a file name, or just press ENTER to quit: ");
+        String fileName = Keyboard.readInput();
+        if(!fileName.isBlank())
+            game.writeResultToTxtFile(fileName);
+    }
+
+    /**
      * pass command and executes them.
      *
      * @param cmd The string to be parsed
@@ -239,7 +253,7 @@ public class GameManager {
             case PROCESS_PLAYER_GUESS:
                 processPlayerGuess();
             case WRITE_RESULT_TO_FILE:
-                game.writeGameResultToFile();
+                processWriteToTxtFile();
         }
 
     }

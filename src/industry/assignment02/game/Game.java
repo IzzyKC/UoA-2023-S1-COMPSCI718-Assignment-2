@@ -2,8 +2,9 @@ package industry.assignment02.game;
 
 import industry.assignment02.player.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Game {
     private Player player;
@@ -109,19 +110,26 @@ public class Game {
     public void guessSecretCodes(String playerGuess) {
         try {
             if (isMaxAttemptsFull()) return;
-            List<Result> results = new ArrayList<>();
+            System.out.println("Turn " + (attempts + 1) + ":");
             Result playerResult = scoreGuessResult("You", computer.getSecretCode(), playerGuess);
             player.getGuessResults().add(playerResult);
-            results.add(playerResult);
-            if (isInterActiveMode()) {
+            printandCheckGuessResult(playerResult);
+            if (!gameEnd && isInterActiveMode()) {
                 String computerGuess;
                 computerGuess = computer.guessPlayerCode();
                 Result computerResult = scoreGuessResult("Computer", player.getSecretCode(), computerGuess);
                 computer.getGuessResults().add(computerResult);
-                results.add(computerResult);
+                printandCheckGuessResult(computerResult);
             }
             addAttempt();
-            printGuessResult(results);
+            if (!gameEnd && isMaxAttemptsFull()) {
+                setGameEnd(true);
+                if (isInterActiveMode())
+                    System.out.println("Sorry! " + maxAttempts + " tries is full!\nResult is a draw. Secret Code was "
+                            + computer.getSecretCode());
+                else
+                    System.out.println("You ran out of tries! Secret Code was " + computer.getSecretCode());
+            }
         } catch (NullPointerException e) {
             System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
@@ -141,27 +149,16 @@ public class Game {
     }
 
     /**
-     * print guess result
+     * print and check guess result
+     * prints game result and check if bulls count number is 4, then game ends and prints winner message
      */
-    private void printGuessResult(List<Result> results) {
-        if (results.size() == 0)
-            throw new NullPointerException("No guess Result to be print!");
-        System.out.println("Turn " + this.attempts + ":");
-        for (Result result : results) {
-            System.out.println(result);
-            if (result.getBullCount() == 4) {
-                setGameEnd(true);
-                System.out.println(result.getGuesser() + " win! :)");
-                return;
-            }
-        }
-        if (!this.gameEnd && isMaxAttemptsFull()) {
+    private void printandCheckGuessResult(Result result) {
+        if (result == null)
+            throw new NullPointerException("There is no guess Result to be print!");
+        System.out.println(result);
+        if (result.getBullCount() == 4) {
             setGameEnd(true);
-            if (isInterActiveMode())
-                System.out.println(this.maxAttempts + " tries is full!\nResult is a draw. Secret Code was "
-                        + computer.getSecretCode());
-            else
-                System.out.println("You ran out of tries! Secret Code was " + computer.getSecretCode());
+            System.out.println(result.getGuesser().equals("You") ? "Congratulations! You win! :)" : "Sorry! Computer Win :(");
         }
     }
 
@@ -201,7 +198,15 @@ public class Game {
         return this.attempts == this.maxAttempts;
     }
 
-    public void writeGameResultToFile() {
+    public void writeResultToTxtFile(String fileName) {
+        try(PrintWriter writer = new PrintWriter(new FileWriter(fileName))){
+            writer.printf("%s", GameMode.BULLSANDCOWS.equals(gameMode) ? "Bulls & Cows" : "Wordle" + " game result.");
+            if(isInterActiveMode())
+                writer.printf("%s", "Your code: " + player.getSecretCode());
+            writer.printf("%s", "Computer's code: " + computer.getSecretCode());
+        }catch(IOException e){
+            System.out.println("Error:　"+e.getMessage());
+        }
 
     }
 }
