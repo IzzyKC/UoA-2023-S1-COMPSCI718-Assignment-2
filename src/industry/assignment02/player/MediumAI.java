@@ -28,6 +28,12 @@ public class MediumAI extends Computer {
         return randomGuess;
     }
 
+    /**
+     * check if next guess already exists
+     *
+     * @param guess next guess code
+     * @return is next guess already exists
+     */
     public boolean isRepeatGuess(String guess) {
         List repeatGuess = getGuessResults().stream()
                 .filter(result -> result.getGuess().equals(guess))

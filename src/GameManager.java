@@ -237,7 +237,7 @@ public class GameManager {
         System.out.print("Hint : Type a file name, or just press ENTER to quit: ");
         String fileName = Keyboard.readInput();
         if (fileName.isBlank()) return;
-        game.writeResultToTxtFile(fileName + ".txt");
+        game.writeResultToTxtFile(fileName);
 
     }
 
