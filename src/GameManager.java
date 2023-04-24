@@ -2,6 +2,9 @@ import industry.assignment02.game.Game;
 import industry.assignment02.game.GameMode;
 import industry.assignment02.player.AILevel;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class GameManager {
     enum Command {SET_PLAYER_SECRET_CODE, PROCESS_PLAYER_GUESS, WRITE_RESULT_TO_FILE}
 
@@ -33,15 +36,31 @@ public class GameManager {
         try {
             printWelcomeMessage();
             game.setGameMode(getGameMode());
-            AILevel gameLevel = getGameLevel();
-            game.init(gameLevel);
+            game.init(getGameLevel());
             passCommand(Command.SET_PLAYER_SECRET_CODE);
             passCommand(Command.PROCESS_PLAYER_GUESS);
             passCommand(Command.WRITE_RESULT_TO_FILE);
             printExitMessage();
-        } catch (Exception e) {
+        }catch (Exception e) {
             System.out.println("[Game Manager] Error Message: " + e.getMessage());
         }
+    }
+
+    /**
+     * initialize a New Game and play it
+     */
+    private void initNewGame(){
+        /**
+        try{
+
+        }catch(FileNotFoundException e) {
+            System.out.println("File Not Found: " + e.getMessage());
+            game.setGameMode(GameMode.BULLSANDCOWS);
+            initNewGame();
+        }catch(Exception e){
+            System.out.println("Error: " + e.getMessage());
+        }
+         */
     }
 
     /**
@@ -100,7 +119,7 @@ public class GameManager {
      * @return String gameLevel by player's choice
      */
     private AILevel getGameLevel() {
-        if (game.getGameMode().equals(GameMode.WORDLE))
+        if (GameMode.WORDLE.equals(game.getGameMode()))
             return AILevel.WORDLE;
 
         printGameLevelMenu();

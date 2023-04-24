@@ -1,6 +1,14 @@
 package industry.assignment02.player;
 
-public abstract class Computer extends Role{
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public abstract class Computer extends Role {
+    public final String WORDLE_FILENAME = "dictionary1.txt";
     private AILevel aiLevel;
 
     /**
@@ -32,23 +40,23 @@ public abstract class Computer extends Role{
     /**
      * generate random digital code
      *
-     * @param length length of secretCode
+     * @param length             length of secretCode
      * @param allowRepeatedDigit code can include repeat digit or not
      */
     public String genRandomCode(int length, boolean allowRepeatedDigit) {
-        String code = "";
+        StringBuilder code = new StringBuilder();
         for (int i = 0; i < length; i++) {
             String digit = String.valueOf(getRandomDigit(0, 9));
-            while ((!allowRepeatedDigit && code.contains(digit))) {
+            while (!allowRepeatedDigit && code.indexOf(digit) >= 0) {
                 String newDigit = String.valueOf(getRandomDigit(0, 9));
-                if (!code.contains(newDigit)) {
+                if (code.indexOf(newDigit) < 0) {
                     digit = newDigit;
                     break;
                 }
             }
-            code += digit;
+            code.append(digit);
         }
-        return code;
+        return code.toString();
     }
 
     /**
@@ -60,29 +68,31 @@ public abstract class Computer extends Role{
         return (int) (Math.random() * (max - min + 1));
     }
 
-    public String genWordleCode() {
-        return null;
-    }
-
-    public String genWordleGuess() {
-        return null;
-    }
-
     /**
-     * set five-letter word of wordle
-     */
-    private void SetWordleSecretWord() {
-        getWordleSecretWordFromFile();
-    }
-
-    /**
-     * set up wordle five-letter word from dictionary.txt
+     * generates wordle five-letter word from dictionary.txt
      * format: five letters and contains only letters A - Z or a - z
      *
-     * @return wordle secret word
      */
-    private String getWordleSecretWordFromFile() {
-        return null;
+    public void genWordleCode() throws FileNotFoundException {
+        List<String> words = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File(WORDLE_FILENAME))) {
+
+            scanner.useDelimiter(",|\\r\\n");
+
+            while (scanner.hasNext()) {
+                String word = scanner.next();
+                if (word.matches("[a-zA-z]{5}$")) {
+                    words.add(word);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        //TODO delete test code
+        System.out.println((words.size() > 0 ? words.get(getRandomDigit(0, words.size() - 1)) : null));
+        setSecretCode(words.size() > 0 ? words.get(getRandomDigit(0, words.size() - 1)) : null);
     }
 
     public abstract String guessPlayerCode();

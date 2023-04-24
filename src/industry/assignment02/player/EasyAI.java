@@ -11,21 +11,13 @@ public class EasyAI extends Computer {
     }
 
     /**
-     * EasyAI guesses player's secret by different AI Level
-     * EASYAI : generates random non-repetitive 4 digits
-     * Wordle :
+     * EasyAI guesses player's secret
+     * generates random non-repetitive 4 digits
      *
      * @return computer's random guess
      */
     @Override
     public String guessPlayerCode() {
-        switch(getAiLevel()) {
-            case EASYAI:
-                return genRandomCode(4, false);
-            case WORDLE:
-                return genWordleGuess();
-            default:
-                return null;
-        }
+        return genRandomCode(4, false);
     }
 }

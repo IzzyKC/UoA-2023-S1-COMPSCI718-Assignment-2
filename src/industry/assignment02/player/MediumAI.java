@@ -21,7 +21,7 @@ public class MediumAI extends Computer {
      */
     @Override
     public String guessPlayerCode() {
-        String randomGuess = null;
+        String randomGuess;
         do {
             randomGuess = genRandomCode(4, false);
         } while (isRepeatGuess(randomGuess));

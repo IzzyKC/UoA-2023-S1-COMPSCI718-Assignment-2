@@ -2,19 +2,14 @@ package industry.assignment02.game;
 
 import industry.assignment02.player.*;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class Game {
     private Player player;
     private Computer computer;
     private GameMode gameMode;
-    //private AILevel gameLevel;
     private int maxAttempts;
-
     private int attempts;
-
     private boolean gameEnd;
 
     public Game() {
@@ -55,13 +50,12 @@ public class Game {
     }
 
     /**
-     * initialize a new game: set up max attempts, create game; players
+     * initialize a new game: set up max attempts, create computer, set up secret code
      */
-    public void init(AILevel level) {
+    public void init(AILevel level) throws IOException {
         maxAttempts = (gameMode.equals(GameMode.BULLSANDCOWS)) ? 7 : 6;
         createComputer(level);
         setUpComputerCode();
-
     }
 
     /**
@@ -81,7 +75,7 @@ public class Game {
     /**
      * set up computer secret code
      */
-    private void setUpComputerCode() {
+    private void setUpComputerCode() throws FileNotFoundException {
         if (computer == null) return;
         if (this.gameMode.equals(GameMode.BULLSANDCOWS))
             computer.genComputerCode();
@@ -222,8 +216,8 @@ public class Game {
                 writer.printf("%s\n", computerResult.toString());
                 if (computerResult.isGuessCorrect())
                     writer.printf("%s\n", computerResult.printWinnerMessage());
-                if (i == (player.getGuessResults().size()-1) &&
-                        playerResult.getBullCount() != 4 && computerResult.getBullCount() !=4) {
+                if (i == (player.getGuessResults().size() - 1) &&
+                        playerResult.getBullCount() != 4 && computerResult.getBullCount() != 4) {
                     writer.print(">>>\n");
                     writer.printf("%s", maxAttempts + " tries is full. Result is a draw.");
                 }
@@ -234,4 +228,5 @@ public class Game {
             System.out.println("Error:　" + e.getMessage());
         }
     }
+
 }
