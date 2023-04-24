@@ -12,7 +12,7 @@ public class Result {
     /**
      * Constructor of result
      *
-     * @param guesser   name of guesser
+     * @param guesser   A name of guesser
      * @param guess     value of guess
      * @param bullCount value of bulls count
      * @param cowCount  value of cows count
@@ -23,6 +23,19 @@ public class Result {
         this.bullCount = bullCount;
         this.cowCount = cowCount;
     }
+
+    /**
+     * Constructor of result
+     *
+     * @param guesser  A name of guesser
+     * @param guess    value of guess
+     *
+     */
+    public Result(String guesser, String guess) {
+        this.guesser = guesser;
+        this.guess = guess;
+    }
+
 
     /**
      * return the value of guess
@@ -36,7 +49,7 @@ public class Result {
     /**
      * set the value of guess
      *
-     * @param guess the value of guess
+     * @param guess value of guess
      */
     public void setGuess(String guess) {
         this.guess = guess;
@@ -45,7 +58,7 @@ public class Result {
     /**
      * return the number of bulls count
      *
-     * @return bullCount the number of bulls
+     * @return bullCount the number of bulls count
      */
     public int getBullCount() {
         return this.bullCount;
@@ -54,25 +67,25 @@ public class Result {
     /**
      * set the number of bulls
      *
-     * @param bullCount tne number of bulls
+     * @param bullCount tne number of bulls count
      */
     public void setBullCount(int bullCount) {
         this.bullCount = bullCount;
     }
 
     /**
-     * return the number of cows
+     * return the number of cows count
      *
-     * @return cowCount the number of cows
+     * @return cowCount the number of cows count
      */
     public int getCowCount() {
         return this.cowCount;
     }
 
     /**
-     * set the number of cows
+     * set the number of cows count
      *
-     * @param cowCount the number of cows
+     * @param cowCount the number of cows count
      */
     public void setCowCount(int cowCount) {
         this.cowCount = cowCount;
@@ -81,7 +94,7 @@ public class Result {
     /**
      * return the value of guesser
      *
-     * @return value of guesser
+     * @return the value of guesser
      */
 
     public String getGuesser() {
@@ -91,7 +104,7 @@ public class Result {
     /**
      * set the value of guesser
      *
-     * @param guesser value of guesser
+     * @param guesser the value of guesser
      */
     public void setGuesser(String guesser) {
         this.guesser = guesser;
@@ -107,9 +120,9 @@ public class Result {
     }
 
     /**
-     * prints winner message
+     * prints winner's message
      *
-     * @return winner message
+     * @return winner's message
      */
     public String printWinnerMessage() {
         return guesser.equals("You") ? "Congratulations! You win! :)" : "Sorry! Computer Win :(";
@@ -118,7 +131,7 @@ public class Result {
     /**
      * check if this guess is correct when bullsCount == 4
      *
-     * @return is guess match secret code correctly
+     * @return is the guess matches secret code correctly
      */
     public boolean isGuessCorrect() {
         return (bullCount == 4);

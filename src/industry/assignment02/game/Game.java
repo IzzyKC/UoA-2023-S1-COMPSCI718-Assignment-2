@@ -17,7 +17,7 @@ public class Game {
     }
 
     /**
-     * return the value game mode
+     * return the value of game mode
      *
      * @return gameMode
      */
@@ -28,7 +28,7 @@ public class Game {
     /**
      * set the value of game mode
      *
-     * @param gameMode game mode
+     * @param gameMode gameMode
      */
     public void setGameMode(GameMode gameMode) {
         this.gameMode = gameMode;
@@ -50,7 +50,7 @@ public class Game {
     }
 
     /**
-     * initialize a new game: set up max attempts, create computer, set up secret code
+     * initialize a new game: set up max attempts, create a computer object, set up secret code
      */
     public void init(AILevel level) throws WordleFileNotFoundException {
         maxAttempts = (gameMode.equals(GameMode.BULLSANDCOWS)) ? 7 : 6;
@@ -59,7 +59,7 @@ public class Game {
     }
 
     /**
-     * create player list:player and computer by game mode and game level
+     * creates a corresponding computer object
      * MediumAI and HardAI must create corresponding computer role
      * otherwiese, create EasyAI
      */
@@ -73,7 +73,7 @@ public class Game {
     }
 
     /**
-     * set up computer secret code
+     * set up computer's secret code or word
      */
     private void setUpComputerCode() throws WordleFileNotFoundException {
         if (computer == null) return;
@@ -85,9 +85,9 @@ public class Game {
 
 
     /**
-     * set up player secret code
+     * set up player's secret code
      *
-     * @param playerCode secret code entered by player
+     * @param playerCode A secret code entered by player
      */
     public void setUpPlayerCode(String playerCode) {
         player.setSecretCode(playerCode);
@@ -99,43 +99,51 @@ public class Game {
      * otherwise game continues, return false
      * after all guesses execute successfully, attempt number plus 1
      *
-     * @param playerGuess guess from player
+     * @param playerGuess A guess from player
      */
     public void guessSecretCodes(String playerGuess) {
         try {
             if (isMaxAttemptsFull()) return;
             System.out.println("Turn " + (attempts + 1) + ":");
-            Result playerResult = scoreGuessResult("You", computer.getSecretCode(), playerGuess);
+            Result playerResult = dispatchScoreGuess("You", computer.getSecretCode(), playerGuess);
             player.getGuessResults().add(playerResult);
             printandCheckGuessResult(playerResult);
             if (!gameEnd && isInterActiveMode()) {
                 String computerGuess;
                 computerGuess = computer.guessPlayerCode();
-                Result computerResult = scoreGuessResult("Computer", player.getSecretCode(), computerGuess);
+                Result computerResult = dispatchScoreGuess("Computer", player.getSecretCode(), computerGuess);
                 computer.getGuessResults().add(computerResult);
                 printandCheckGuessResult(computerResult);
             }
             addAttempt();
             if (!gameEnd && isMaxAttemptsFull()) {
                 setGameEnd(true);
-                if (isInterActiveMode())
-                    System.out.println("Sorry, " + maxAttempts + " tries is full!\nResult is a draw. Secret Code was "
-                            + computer.getSecretCode());
-                else
-                    System.out.println("You ran out of tries! Secret Code was " + computer.getSecretCode());
+                System.out.println(getGameEndResultMessage(true));
             }
-        } catch (NullPointerException e) {
-            System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("[Guess Secret Code] Error: " + e.getMessage());
         }
     }
 
     /**
+     * if no one wins the game, then concludes the game result
+     *
+     * @param isPrintSecretCode needs to print secret code or not
+     */
+    private String getGameEndResultMessage(boolean isPrintSecretCode) {
+        StringBuilder resultMsg = new StringBuilder("Sorry! You ran out of tries! ");
+        if (isInterActiveMode())
+            resultMsg.append("Result is a draw. ");
+        if(isPrintSecretCode)
+            resultMsg.append("Secret Code was " + computer.getSecretCode());
+        return resultMsg.toString();
+    }
+
+    /**
      * check if computer needs to guess player's secret code
      * EASYAI, MEDIUMAI, HARDAI computer need to guess player's secret code
      *
-     * @return boolean value of computer guess
+     * @return is a game of multi players
      */
     public boolean isInterActiveMode() {
         AILevel level = computer.getAiLevel();
@@ -157,17 +165,38 @@ public class Game {
     }
 
     /**
+     * dispatches the corresponding scoring method by different game mode
+     *
+     * @param guesser    A name of game roles
+     * @param secretCode A secret code/word set up by different game mode
+     * @param guess      A player's guess
+     * @return A result of guess
+     */
+    private Result dispatchScoreGuess(String guesser, String secretCode, String guess) {
+        switch (gameMode) {
+            case BULLSANDCOWS:
+                return scoreBullsAndCowsResult(guesser, secretCode, guess);
+            case WORDLE:
+                return scoreWordleResult(guesser, secretCode, guess);
+            default:
+                return null;
+        }
+    }
+
+    /**
      * check guess result
      *
-     * @return result of guess
+     * @return A result of guess
      */
-    private Result scoreGuessResult(String guesser, String secretCode, String guess) {
+    private Result scoreBullsAndCowsResult(String guesser, String secretCode, String guess) {
         try {
             if (secretCode == null || secretCode.isBlank())
                 throw new NullPointerException(guesser + " SecretCode is NULL!");
             if (guess == null || guess.isBlank())
                 throw new NullPointerException(guesser + " Guess is NULL!");
+
             int bulls = 0, cows = 0;
+
             for (int i = 0; i < guess.length(); i++) {
                 int index = secretCode.indexOf(guess.charAt(i));
                 if (index == i)
@@ -175,9 +204,52 @@ public class Game {
                 else if (index >= 0)
                     cows++;
             }
+
             return new Result(guesser, guess, bulls, cows);
-        } catch (NullPointerException e) {
-            System.out.println("[ScoreGuessResult] Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("[ScoreBulls&CowsResult] Error: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * scores the result of player's guess for wordle
+     * check bulls count first, and marks the matched char to *
+     * then check cows count from secret word after marked
+     *
+     * @param guesser A name of game role
+     * @param target  A secret word
+     * @param guess   A player's guess
+     * @return A result of player's guess
+     */
+    private Result scoreWordleResult(String guesser, String target, String guess) {
+        try {
+            if (target == null || target.isBlank())
+                throw new NullPointerException("Wordle secret word is NULL!");
+            if (guess == null || guess.isBlank())
+                throw new NullPointerException("Player guess is NULL!");
+
+            int bulls = 0, cows = 0;
+
+            Result result = new Result(guesser, guess);
+
+            for (int i = 0; i < target.length(); i++) {
+                if (target.toLowerCase().charAt(i) == guess.toLowerCase().charAt(i)) {
+                    bulls++;
+                    target = target.substring(0, i) + "*" + target.substring(i + 1);
+                }
+            }
+            result.setBullCount(bulls);
+
+            for (int i = 0; i < target.length(); i++) {
+                if (target.toLowerCase().contains(String.valueOf(guess.toLowerCase().charAt(i))))
+                    cows++;
+            }
+            result.setCowCount(cows);
+
+            return result;
+        } catch (Exception e) {
+            System.out.println("[scoreWordleResult] Error: " + e.getMessage());
         }
         return null;
     }
@@ -186,7 +258,7 @@ public class Game {
      * if the maximum of game tries is full, return true
      * otherwise return false
      *
-     * @return the status of max attempts
+     * @return The maxAttempts is full or not
      */
     private boolean isMaxAttemptsFull() {
         return this.attempts == this.maxAttempts;
@@ -194,8 +266,10 @@ public class Game {
 
     /**
      * saves game result to a text file
+     * if the game has only one player(not interactive mode), then skips the step of printing computer result
+     * if the result of computer's guess is null, then end while loop(no more result needs to be printed)
      *
-     * @param fileName fileName entered by player
+     * @param fileName A fileName entered by player
      */
     public void writeResultToTxtFile(String fileName) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
@@ -203,25 +277,25 @@ public class Game {
             if (isInterActiveMode())
                 writer.printf("%s\n", "Your code: " + player.getSecretCode());
             writer.printf("%s\n", "Computer's code: " + computer.getSecretCode());
-            int i = 0;
-            while (i < player.getGuessResults().size()) {
+            for (int i = 0; i < player.getGuessResults().size(); i++) {
                 writer.print("---\n");
                 writer.printf("%s\n", "Turn " + (i + 1) + ":");
                 Result playerResult = player.getGuessResults().get(i);
                 writer.printf("%s\n", playerResult.toString());
                 if (playerResult.isGuessCorrect())
                     writer.printf("%s\n", playerResult.printWinnerMessage());
+                if (!isInterActiveMode()) continue;
                 if (i >= computer.getGuessResults().size()) break;
                 Result computerResult = computer.getGuessResults().get(i);
                 writer.printf("%s\n", computerResult.toString());
                 if (computerResult.isGuessCorrect())
                     writer.printf("%s\n", computerResult.printWinnerMessage());
-                if (i == (player.getGuessResults().size() - 1) &&
-                        playerResult.getBullCount() != 4 && computerResult.getBullCount() != 4) {
-                    writer.print(">>>\n");
-                    writer.printf("%s", maxAttempts + " tries is full. Result is a draw.");
-                }
-                i++;
+            }
+            if (isMaxAttemptsFull() && (!player.getGuessResults().get(maxAttempts-1).isGuessCorrect()
+                    || (isInterActiveMode() && computer.getGuessResults().size() == maxAttempts
+                    && !computer.getGuessResults().get(maxAttempts-1).isGuessCorrect()))) {
+                writer.print(">>>\n");
+                writer.printf("%s", getGameEndResultMessage(false));
             }
             System.out.println("Game Result saved successfully to " + fileName + "!");
         } catch (IOException e) {
@@ -232,10 +306,10 @@ public class Game {
     /**
      * check wordle guess format: five letters and contains only letters A - Z or a - z
      *
-     * @param word wordle guess
-     * @return result of format check
+     * @param word A player's wordle guess
+     * @return A result of format check
      */
-    public boolean isWordleGuessValid(String word){
+    public boolean isWordleGuessValid(String word) {
         return computer.isWordVaild(word);
     }
 

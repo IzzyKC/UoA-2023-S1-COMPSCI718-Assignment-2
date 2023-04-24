@@ -32,10 +32,9 @@ public class GameManager {
      */
     public void start(boolean isReset) {
         try {
-            while (!isReset) {
+            if (!isReset) {
                 printWelcomeMessage();
                 game.setGameMode(getGameMode());
-                break;
             }
             game.init(getGameLevel());
             passCommand(Command.SET_PLAYER_SECRET_CODE);
@@ -44,19 +43,27 @@ public class GameManager {
             printExitMessage();
         } catch (WordleFileNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
-            System.out.println("The system will switch to Bulls and Cows automatically.\n");
-            game.setGameMode(GameMode.BULLSANDCOWS);
-            start(true);
+            switchToGameLevelMenu();
         } catch (Exception e) {
             System.out.println("[Game Manager] Error Message: " + e.getMessage());
         }
     }
 
     /**
-     * print the welcome message of the game
+     * prints the welcome message of the game
      */
     private void printWelcomeMessage() {
         System.out.println("Welcome to the game!");
+    }
+
+    /**
+     * when wodle game can not find the dictionary file,then game stops
+     * and return back to game level menu where the player can choose the different difficulty levels of the game
+     */
+    private void switchToGameLevelMenu(){
+        System.out.println("The system will switch to Bulls and Cows automatically.\n");
+        game.setGameMode(GameMode.BULLSANDCOWS);
+        start(true);
     }
 
     /**
@@ -105,7 +112,7 @@ public class GameManager {
      * prompt player for Bulls and Cows difficulty
      * WORDLE has no difficulty level.
      *
-     * @return String gameLevel by player's choice
+     * @return String A gameLevel from player's choice
      */
     private AILevel getGameLevel() {
         if (GameMode.WORDLE.equals(game.getGameMode()))
@@ -156,7 +163,7 @@ public class GameManager {
     }
 
     /**
-     * set up player Secret code if needed
+     * sets up player's Secret code if needed
      */
     private void processPlayerCodeSetup() {
         if (!game.isInterActiveMode()) return;
@@ -166,7 +173,7 @@ public class GameManager {
     }
 
     /**
-     * prompt player to enter secret code
+     * prompt player to enter a secret code
      * Bulls and Cows : EasyAI, MediumAI and HARDAI need player to enter their secret code
      * Otherwise, computer will generate random code at the beginning of the game
      *
@@ -188,8 +195,8 @@ public class GameManager {
     }
 
     /**
-     * process player Guess
-     * prompt player to enter secret code and check input is valid
+     * processes player's Guess
+     * prompt player to enter a secret code and check if input is valid
      */
     private void processPlayerGuess() {
         while (!game.isGameEnd()) {
@@ -200,7 +207,7 @@ public class GameManager {
     }
 
     /**
-     * get user guess
+     * prompt player to enter a valid guess
      * format : non-repetitive 4 digit from 0 to 9
      */
     private String getUserGuess() {
@@ -209,15 +216,15 @@ public class GameManager {
         while (!isInputValid) {
             System.out.println("Enter your guess:");
             input = Keyboard.readInput();
-            switch (game.getGameMode()){
+            switch (game.getGameMode()) {
                 case BULLSANDCOWS:
                     isInputValid = isDigitalCodeValid(input);
-                    if(!isInputValid)
+                    if (!isInputValid)
                         System.out.println("Your guess is invalid! Please enter a number of non-repetitive 4 digits from 0-9!");
                     break;
                 case WORDLE:
                     isInputValid = game.isWordleGuessValid(input);
-                    if(!isInputValid)
+                    if (!isInputValid)
                         System.out.println("Your guess is invalid! Please enter a 5 letter word from A-Z or a-z!");
                     break;
                 default:
@@ -228,7 +235,7 @@ public class GameManager {
     }
 
     /**
-     * check if format of the code is valid
+     * check if the digital code is valid
      *
      * @param code non-repetitive 4-digits code from 0 to 9
      * @return is code valid
@@ -245,7 +252,7 @@ public class GameManager {
     }
 
     /**
-     * process writing game result to txt file
+     * processes writing the game result to a txt file
      */
     private void processWriteToTxtFile() {
         System.out.println(">>>");
@@ -258,9 +265,9 @@ public class GameManager {
     }
 
     /**
-     * pass command and executes them.
+     * passes command and executes them.
      *
-     * @param cmd The string to be parsed
+     * @param cmd The final string of a command
      */
     private void passCommand(Command cmd) {
         switch (cmd) {
