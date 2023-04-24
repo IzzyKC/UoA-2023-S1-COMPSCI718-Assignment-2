@@ -1,9 +1,7 @@
 import industry.assignment02.game.Game;
 import industry.assignment02.game.GameMode;
+import industry.assignment02.game.WordleFileNotFoundException;
 import industry.assignment02.player.AILevel;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class GameManager {
     enum Command {SET_PLAYER_SECRET_CODE, PROCESS_PLAYER_GUESS, WRITE_RESULT_TO_FILE}
@@ -24,7 +22,7 @@ public class GameManager {
      */
     public static void main(String[] args) {
         GameManager gm = new GameManager();
-        gm.start();
+        gm.start(false);
     }
 
     /**
@@ -32,35 +30,26 @@ public class GameManager {
      * guess the secrect code, check result and
      * prints an exit message when the game ends.
      */
-    public void start() {
+    public void start(boolean isReset) {
         try {
-            printWelcomeMessage();
-            game.setGameMode(getGameMode());
+            while (!isReset) {
+                printWelcomeMessage();
+                game.setGameMode(getGameMode());
+                break;
+            }
             game.init(getGameLevel());
             passCommand(Command.SET_PLAYER_SECRET_CODE);
             passCommand(Command.PROCESS_PLAYER_GUESS);
             passCommand(Command.WRITE_RESULT_TO_FILE);
             printExitMessage();
-        }catch (Exception e) {
+        } catch (WordleFileNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println("The system will switch to Bulls and Cows automatically.\n");
+            game.setGameMode(GameMode.BULLSANDCOWS);
+            start(true);
+        } catch (Exception e) {
             System.out.println("[Game Manager] Error Message: " + e.getMessage());
         }
-    }
-
-    /**
-     * initialize a New Game and play it
-     */
-    private void initNewGame(){
-        /**
-        try{
-
-        }catch(FileNotFoundException e) {
-            System.out.println("File Not Found: " + e.getMessage());
-            game.setGameMode(GameMode.BULLSANDCOWS);
-            initNewGame();
-        }catch(Exception e){
-            System.out.println("Error: " + e.getMessage());
-        }
-         */
     }
 
     /**
@@ -220,10 +209,19 @@ public class GameManager {
         while (!isInputValid) {
             System.out.println("Enter your guess:");
             input = Keyboard.readInput();
-            if (isDigitalCodeValid(input)) {
-                isInputValid = true;
-            } else {
-                System.out.println("Your guess is invalid! Please enter a number of non-repetitive 4 digits from 0-9!");
+            switch (game.getGameMode()){
+                case BULLSANDCOWS:
+                    isInputValid = isDigitalCodeValid(input);
+                    if(!isInputValid)
+                        System.out.println("Your guess is invalid! Please enter a number of non-repetitive 4 digits from 0-9!");
+                    break;
+                case WORDLE:
+                    isInputValid = game.isWordleGuessValid(input);
+                    if(!isInputValid)
+                        System.out.println("Your guess is invalid! Please enter a 5 letter word from A-Z or a-z!");
+                    break;
+                default:
+                    break;
             }
         }
         return input;
@@ -248,9 +246,8 @@ public class GameManager {
 
     /**
      * process writing game result to txt file
-     *
      */
-    private void processWriteToTxtFile(){
+    private void processWriteToTxtFile() {
         System.out.println(">>>");
         System.out.println("If you want to save this game result to a file, please enter a file name: ");
         System.out.print("Hint : Type a file name, or just press ENTER to quit: ");
@@ -266,7 +263,7 @@ public class GameManager {
      * @param cmd The string to be parsed
      */
     private void passCommand(Command cmd) {
-        switch (cmd){
+        switch (cmd) {
             case SET_PLAYER_SECRET_CODE:
                 processPlayerCodeSetup();
                 break;

@@ -1,5 +1,7 @@
 package industry.assignment02.player;
 
+import industry.assignment02.game.WordleFileNotFoundException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,7 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public abstract class Computer extends Role {
-    public final String WORDLE_FILENAME = "dictionary1.txt";
+    public final String WORDLE_FILENAME = "dictionary.txt";
     private AILevel aiLevel;
 
     /**
@@ -73,7 +75,7 @@ public abstract class Computer extends Role {
      * format: five letters and contains only letters A - Z or a - z
      *
      */
-    public void genWordleCode() throws FileNotFoundException {
+    public void genWordleCode() throws WordleFileNotFoundException {
         List<String> words = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(WORDLE_FILENAME))) {
 
@@ -81,18 +83,27 @@ public abstract class Computer extends Role {
 
             while (scanner.hasNext()) {
                 String word = scanner.next();
-                if (word.matches("[a-zA-z]{5}$")) {
+                if (isWordVaild(word)) {
                     words.add(word);
                 }
             }
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException(e.getMessage());
+            throw new WordleFileNotFoundException("Wordle can't start to play! The system cannot find Wordle File: "+WORDLE_FILENAME);
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
-        //TODO delete test code
-        System.out.println((words.size() > 0 ? words.get(getRandomDigit(0, words.size() - 1)) : null));
+
         setSecretCode(words.size() > 0 ? words.get(getRandomDigit(0, words.size() - 1)) : null);
+    }
+
+    /**
+     * check wordle word format: five letters and contains only letters A - Z or a - z
+     *
+     * @param word wordle word
+     * @return result of format check
+     */
+    public boolean isWordVaild(String word){
+        return word.matches("[a-zA-z]{5}$");
     }
 
     public abstract String guessPlayerCode();

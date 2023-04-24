@@ -52,7 +52,7 @@ public class Game {
     /**
      * initialize a new game: set up max attempts, create computer, set up secret code
      */
-    public void init(AILevel level) throws IOException {
+    public void init(AILevel level) throws WordleFileNotFoundException {
         maxAttempts = (gameMode.equals(GameMode.BULLSANDCOWS)) ? 7 : 6;
         createComputer(level);
         setUpComputerCode();
@@ -75,7 +75,7 @@ public class Game {
     /**
      * set up computer secret code
      */
-    private void setUpComputerCode() throws FileNotFoundException {
+    private void setUpComputerCode() throws WordleFileNotFoundException {
         if (computer == null) return;
         if (this.gameMode.equals(GameMode.BULLSANDCOWS))
             computer.genComputerCode();
@@ -227,6 +227,16 @@ public class Game {
         } catch (IOException e) {
             System.out.println("Error:　" + e.getMessage());
         }
+    }
+
+    /**
+     * check wordle guess format: five letters and contains only letters A - Z or a - z
+     *
+     * @param word wordle guess
+     * @return result of format check
+     */
+    public boolean isWordleGuessValid(String word){
+        return computer.isWordVaild(word);
     }
 
 }
