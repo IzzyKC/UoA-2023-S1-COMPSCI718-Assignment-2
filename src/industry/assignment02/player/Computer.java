@@ -22,7 +22,7 @@ public abstract class Computer extends Role {
     }
 
     /**
-     * set the value of AILevel
+     * sets the value of AILevel
      *
      * @param aiLevel the value of AiLevel
      */
@@ -31,15 +31,15 @@ public abstract class Computer extends Role {
     }
 
     /**
-     * generate random computer secret code automatically.
-     * The code is 4 digits from 0 – 9 and non-repetitive
+     * generates random computer secret code automatically.
+     * The code is non-repetitive 4 digits from 0 – 9
      */
     public void genComputerCode() {
         super.setSecretCode(genRandomCode(4, false));
     }
 
     /**
-     * generate random digital code
+     * generates a 4 digits randomly
      *
      * @param length             length of secret Code
      * @param allowRepeatedDigit code can include repeat digit or not
@@ -61,7 +61,7 @@ public abstract class Computer extends Role {
     }
 
     /**
-     * return digit number from 0 to 9
+     * returns a  digit number from 0 to 9
      *
      * @return A random integer number
      */
@@ -70,9 +70,8 @@ public abstract class Computer extends Role {
     }
 
     /**
-     * generates wordle five-letter word from dictionary.txt
+     * generates Wordle five-letter word from dictionary.txt
      * format: five letters and contains only letters A - Z or a - z
-     *
      */
     public void genWordleCode() throws WordleFileNotFoundException {
         List<String> words = new ArrayList<>();
@@ -88,7 +87,7 @@ public abstract class Computer extends Role {
             }
         } catch (FileNotFoundException e) {
             throw new WordleFileNotFoundException("Something went wrong! Wordle can't start to play! " +
-                    "The system cannot find Wordle File: "+WORDLE_FILENAME);
+                    "The system cannot find Wordle File: " + WORDLE_FILENAME);
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -97,17 +96,17 @@ public abstract class Computer extends Role {
     }
 
     /**
-     * check wordle word format: five letters and contains only letters A - Z or a - z
+     * check Wordle word format: five letters and contains only letters A - Z or a - z
      *
-     * @param word A wordle word
+     * @param word A Wordle word
      * @return A result of format check
      */
-    public boolean isWordVaild(String word){
+    public boolean isWordVaild(String word) {
         return word.matches("[a-zA-z]{5}$");
     }
 
     /**
-     * A abstract method: guess the player's secret code
+     * An abstract method: guess the player's secret code
      *
      * @return A possible secret code
      */

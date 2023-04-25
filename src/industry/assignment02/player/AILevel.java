@@ -1,7 +1,7 @@
 package industry.assignment02.player;
 
 /**
- * //enumeration of game role type
+ * //enumeration of AI Level
  */
 public enum AILevel {
     BEGINNER,

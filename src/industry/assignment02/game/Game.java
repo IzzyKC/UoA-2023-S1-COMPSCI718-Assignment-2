@@ -116,9 +116,9 @@ public class Game {
                 printandCheckGuessResult(computerResult);
             }
             addAttempt();
-            if (!gameEnd && isMaxAttemptsFull()) {
+            if (isMaxAttemptsFull() && !gameEnd) {
                 setGameEnd(true);
-                System.out.println(getGameEndResultMessage(true));
+                System.out.println(getGameResultMessage(true));
             }
         } catch (Exception e) {
             System.out.println("[Guess Secret Code] Error: " + e.getMessage());
@@ -126,15 +126,15 @@ public class Game {
     }
 
     /**
-     * if no one wins the game, then concludes the game result
+     * if no one wins the game, then return the String of the game result
      *
      * @param isPrintSecretCode needs to print secret code or not
      */
-    private String getGameEndResultMessage(boolean isPrintSecretCode) {
+    private String getGameResultMessage(boolean isPrintSecretCode) {
         StringBuilder resultMsg = new StringBuilder("Sorry! You ran out of tries! ");
         if (isInterActiveMode())
             resultMsg.append("Result is a draw. ");
-        if(isPrintSecretCode)
+        if (isPrintSecretCode)
             resultMsg.append("Secret Code was " + computer.getSecretCode());
         return resultMsg.toString();
     }
@@ -291,11 +291,11 @@ public class Game {
                 if (computerResult.isGuessCorrect())
                     writer.printf("%s\n", computerResult.printWinnerMessage());
             }
-            if (isMaxAttemptsFull() && (!player.getGuessResults().get(maxAttempts-1).isGuessCorrect()
+            if (isMaxAttemptsFull() && (!player.getGuessResults().get(maxAttempts - 1).isGuessCorrect()
                     || (isInterActiveMode() && computer.getGuessResults().size() == maxAttempts
-                    && !computer.getGuessResults().get(maxAttempts-1).isGuessCorrect()))) {
+                    && !computer.getGuessResults().get(maxAttempts - 1).isGuessCorrect()))) {
                 writer.print(">>>\n");
-                writer.printf("%s", getGameEndResultMessage(false));
+                writer.printf("%s", getGameResultMessage(false));
             }
             System.out.println("Game Result saved successfully to " + fileName + "!");
         } catch (IOException e) {

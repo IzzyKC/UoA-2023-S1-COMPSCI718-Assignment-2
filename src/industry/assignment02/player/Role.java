@@ -13,7 +13,7 @@ public abstract class Role {
      * constructor of Role
      * initialize guessResults
      */
-    public Role(){
+    public Role() {
         guessResults = new ArrayList<>();
     }
 
@@ -27,7 +27,7 @@ public abstract class Role {
     }
 
     /**
-     * set the value of secretCode
+     * sets the value of secretCode
      *
      * @param secretCode the value of secret code
      */
@@ -45,7 +45,7 @@ public abstract class Role {
     }
 
     /**
-     * set the collection of guessResults
+     * sets the collection of guessResults
      *
      * @param guessResults the collection of guessResults
      */

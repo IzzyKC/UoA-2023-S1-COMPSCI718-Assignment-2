@@ -39,7 +39,7 @@ public class HardAI extends Computer {
                 j--;
             }
         }
-        return (possibleGuesses.size() > 0) ? possibleGuesses.get(getRandomDigit(0, possibleGuesses.size()-1)) : null;
+        return (possibleGuesses.size() > 0) ? possibleGuesses.get(getRandomDigit(0, possibleGuesses.size() - 1)) : null;
     }
 
     /**

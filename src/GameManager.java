@@ -26,9 +26,9 @@ public class GameManager {
     }
 
     /**
-     * Prints a welcome message, prompt player for game mode and difficulty, initialize game setting
-     * guess the secrect code, check result and
-     * prints an exit message when the game ends.
+     * Prints a welcome message, prompt player for game mode and difficulty selection, initialize game setting,
+     * prompt player to guess the secret code or word, then check result
+     * and prints an exit message when the game ends.
      */
     public void start(boolean isReset) {
         try {
@@ -57,10 +57,10 @@ public class GameManager {
     }
 
     /**
-     * when wodle game can not find the dictionary file,then game stops
+     * when Wodle game can not find the dictionary file,then game stops
      * and return back to game level menu where the player can choose the different difficulty levels of the game
      */
-    private void switchToGameLevelMenu(){
+    private void switchToGameLevelMenu() {
         System.out.println("The system will switch to Bulls and Cows automatically.\n");
         game.setGameMode(GameMode.BULLSANDCOWS);
         start(true);
@@ -110,7 +110,7 @@ public class GameManager {
 
     /**
      * prompt player for Bulls and Cows difficulty
-     * WORDLE has no difficulty level.
+     * Wordle has no difficulty level. System will set it as "WORDLE"(Enum) automatically.
      *
      * @return String A gameLevel from player's choice
      */
@@ -174,7 +174,7 @@ public class GameManager {
 
     /**
      * prompt player to enter a secret code
-     * Bulls and Cows : EasyAI, MediumAI and HARDAI need player to enter their secret code
+     * Bulls and Cows : EasyAI, MediumAI and HardAI need player to enter their secret code
      * Otherwise, computer will generate random code at the beginning of the game
      *
      * @return secretCode from player
@@ -200,7 +200,7 @@ public class GameManager {
      */
     private void processPlayerGuess() {
         while (!game.isGameEnd()) {
-            String guess = getUserGuess();
+            String guess = getPlayerGuess();
             System.out.println("-----");
             game.guessSecretCodes(guess);
         }
@@ -210,7 +210,7 @@ public class GameManager {
      * prompt player to enter a valid guess
      * format : non-repetitive 4 digit from 0 to 9
      */
-    private String getUserGuess() {
+    private String getPlayerGuess() {
         String input = "";
         boolean isInputValid = false;
         while (!isInputValid) {
@@ -242,13 +242,6 @@ public class GameManager {
      */
     private boolean isDigitalCodeValid(String code) {
         return code.matches("^(?:([0-9])(?!.*\\1)){4}");
-    }
-
-    /**
-     * Prints the exit message of the game
-     */
-    private void printExitMessage() {
-        System.out.println("Thank you for playing!");
     }
 
     /**
@@ -285,4 +278,10 @@ public class GameManager {
         }
     }
 
+    /**
+     * Prints the exit message of the game
+     */
+    private void printExitMessage() {
+        System.out.println("Thank you for playing!");
+    }
 }
