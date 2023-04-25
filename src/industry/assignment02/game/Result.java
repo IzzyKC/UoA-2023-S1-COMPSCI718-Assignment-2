@@ -124,7 +124,7 @@ public class Result {
      *
      * @return winner's message
      */
-    public String printWinnerMessage() {
+    public String getWinnerMessage() {
         return guesser.equals("You") ? "Congratulations! You win! :)" : "Sorry! Computer Win :(";
     }
 

@@ -160,7 +160,7 @@ public class Game {
         System.out.println(result);
         if (result.isGuessCorrect()) {
             setGameEnd(true);
-            System.out.println(result.printWinnerMessage());
+            System.out.println(result.getWinnerMessage());
         }
     }
 
@@ -283,13 +283,13 @@ public class Game {
                 Result playerResult = player.getGuessResults().get(i);
                 writer.printf("%s\n", playerResult.toString());
                 if (playerResult.isGuessCorrect())
-                    writer.printf("%s\n", playerResult.printWinnerMessage());
+                    writer.printf("%s\n", playerResult.getWinnerMessage());
                 if (!isInterActiveMode()) continue;
                 if (i >= computer.getGuessResults().size()) break;
                 Result computerResult = computer.getGuessResults().get(i);
                 writer.printf("%s\n", computerResult.toString());
                 if (computerResult.isGuessCorrect())
-                    writer.printf("%s\n", computerResult.printWinnerMessage());
+                    writer.printf("%s\n", computerResult.getWinnerMessage());
             }
             if (isMaxAttemptsFull() && (!player.getGuessResults().get(maxAttempts - 1).isGuessCorrect()
                     || (isInterActiveMode() && computer.getGuessResults().size() == maxAttempts
