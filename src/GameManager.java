@@ -123,7 +123,7 @@ public class GameManager {
     }
 
     /**
-     * prompt player for Bulls and Cows difficulty
+     * prompt player for Bulls and Cows difficulty level
      * Wordle has no difficulty level. System will set it as "WORDLE"(Enum) automatically.
      *
      * @return String A gameLevel from player's choice
