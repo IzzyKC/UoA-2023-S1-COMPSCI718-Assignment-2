@@ -166,7 +166,7 @@ public class GameManager {
      * sets up player's Secret code if needed
      */
     private void processPlayerCodeSetup() {
-        if (!game.isInterActiveMode()) return;
+        if (!game.isInteractiveMode()) return;
         String code = getPlayerSecretCode();
         game.setUpPlayerCode(code);
         System.out.println(">>>>>");

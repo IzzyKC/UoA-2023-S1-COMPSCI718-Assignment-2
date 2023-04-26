@@ -34,7 +34,7 @@ public class MediumAI extends Computer {
      * @param guess next guess code
      * @return is next guess already exists
      */
-    public boolean isRepeatGuess(String guess) {
+    private boolean isRepeatGuess(String guess) {
         List repeatGuess = getGuessResults().stream()
                 .filter(result -> result.getGuess().equals(guess))
                 .collect(Collectors.toList());

@@ -54,7 +54,7 @@ public class Game {
      */
     public void init(AILevel level) throws WordleFileNotFoundException {
         maxAttempts = (gameMode.equals(GameMode.BULLSANDCOWS)) ? 7 : 6;
-        createComputer(level);
+        initComputer(level);
         setUpComputerCode();
     }
 
@@ -63,7 +63,7 @@ public class Game {
      * MediumAI and HardAI must create corresponding computer role
      * otherwiese, create EasyAI
      */
-    private void createComputer(AILevel level) {
+    private void initComputer(AILevel level) {
         if (AILevel.MEDIUMAI.equals(level))
             computer = new MediumAI(level);
         else if (AILevel.HARDAI.equals(level))
@@ -108,7 +108,7 @@ public class Game {
             Result playerResult = dispatchScoreGuess("You", computer.getSecretCode(), playerGuess);
             player.getGuessResults().add(playerResult);
             printandCheckGuessResult(playerResult);
-            if (!gameEnd && isInterActiveMode()) {
+            if (!gameEnd && isInteractiveMode()) {
                 String computerGuess;
                 computerGuess = computer.guessPlayerCode();
                 Result computerResult = dispatchScoreGuess("Computer", player.getSecretCode(), computerGuess);
@@ -132,7 +132,7 @@ public class Game {
      */
     private String getGameResultMessage(boolean isPrintSecretCode) {
         StringBuilder resultMsg = new StringBuilder("Sorry! You ran out of tries! ");
-        if (isInterActiveMode())
+        if (isInteractiveMode())
             resultMsg.append("Result is a draw. ");
         if (isPrintSecretCode)
             resultMsg.append("Secret Code was " + computer.getSecretCode());
@@ -140,12 +140,12 @@ public class Game {
     }
 
     /**
-     * check if computer needs to guess player's secret code
-     * EASYAI, MEDIUMAI, HARDAI computer need to guess player's secret code
+     * check if player plays against AI
+     * A player can choose to play against EASYAI, MEDIUMAI, HARDAI
      *
-     * @return is a game of multi players
+     * @return is a game of multi players(player vs computer)
      */
-    public boolean isInterActiveMode() {
+    public boolean isInteractiveMode() {
         AILevel level = computer.getAiLevel();
         return AILevel.EASYAI.equals(level) || AILevel.MEDIUMAI.equals(level) || AILevel.HARDAI.equals(level);
     }
@@ -191,9 +191,9 @@ public class Game {
     private Result scoreBullsAndCowsResult(String guesser, String secretCode, String guess) {
         try {
             if (secretCode == null || secretCode.isBlank())
-                throw new NullPointerException(guesser + " SecretCode is NULL!");
+                throw new NullPointerException(guesser + " secretCode is NULL!");
             if (guess == null || guess.isBlank())
-                throw new NullPointerException(guesser + " Guess is NULL!");
+                throw new NullPointerException(guesser + " guess is NULL!");
 
             int bulls = 0, cows = 0;
 
@@ -225,9 +225,9 @@ public class Game {
     private Result scoreWordleResult(String guesser, String target, String guess) {
         try {
             if (target == null || target.isBlank())
-                throw new NullPointerException("Wordle secret word is NULL!");
+                throw new NullPointerException("Wordle's secret word is NULL!");
             if (guess == null || guess.isBlank())
-                throw new NullPointerException("Player guess is NULL!");
+                throw new NullPointerException("Player's Wordle guess is NULL!");
 
             int bulls = 0, cows = 0;
 
@@ -239,13 +239,13 @@ public class Game {
                     target = target.substring(0, i) + "*" + target.substring(i + 1);
                 }
             }
-            result.setBullCount(bulls);
+            result.setBulls(bulls);
 
             for (int i = 0; i < target.length(); i++) {
                 if (target.toLowerCase().contains(String.valueOf(guess.toLowerCase().charAt(i))))
                     cows++;
             }
-            result.setCowCount(cows);
+            result.setCows(cows);
 
             return result;
         } catch (Exception e) {
@@ -274,7 +274,7 @@ public class Game {
     public void writeResultToTxtFile(String fileName) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             writer.printf("%s\n", (GameMode.BULLSANDCOWS.equals(gameMode) ? "Bulls & Cows" : "Wordle") + " game result.");
-            if (isInterActiveMode())
+            if (isInteractiveMode())
                 writer.printf("%s\n", "Your code: " + player.getSecretCode());
             writer.printf("%s\n", "Computer's code: " + computer.getSecretCode());
             for (int i = 0; i < player.getGuessResults().size(); i++) {
@@ -284,7 +284,7 @@ public class Game {
                 writer.printf("%s\n", playerResult.toString());
                 if (playerResult.isGuessCorrect())
                     writer.printf("%s\n", playerResult.getWinnerMessage());
-                if (!isInterActiveMode()) continue;
+                if (!isInteractiveMode()) continue;
                 if (i >= computer.getGuessResults().size()) break;
                 Result computerResult = computer.getGuessResults().get(i);
                 writer.printf("%s\n", computerResult.toString());
@@ -292,7 +292,7 @@ public class Game {
                     writer.printf("%s\n", computerResult.getWinnerMessage());
             }
             if (isMaxAttemptsFull() && (!player.getGuessResults().get(maxAttempts - 1).isGuessCorrect()
-                    || (isInterActiveMode() && computer.getGuessResults().size() == maxAttempts
+                    || (isInteractiveMode() && computer.getGuessResults().size() == maxAttempts
                     && !computer.getGuessResults().get(maxAttempts - 1).isGuessCorrect()))) {
                 writer.print(">>>\n");
                 writer.printf("%s", getGameResultMessage(false));
@@ -310,7 +310,7 @@ public class Game {
      * @return A result of format check
      */
     public boolean isWordleGuessValid(String word) {
-        return computer.isWordVaild(word);
+        return computer.isWordleWordVaild(word);
     }
 
 }

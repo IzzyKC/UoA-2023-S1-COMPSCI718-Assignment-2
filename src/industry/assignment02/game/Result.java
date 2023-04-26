@@ -6,22 +6,22 @@ package industry.assignment02.game;
 public class Result {
     private String guesser;
     private String guess;
-    private int bullCount;
-    private int cowCount;
+    private int bulls;
+    private int cows;
 
     /**
      * Constructor of result
      *
      * @param guesser   A name of guesser
      * @param guess     value of guess
-     * @param bullCount value of bulls count
-     * @param cowCount  value of cows count
+     * @param bulls value of bulls count
+     * @param cows  value of cows count
      */
-    public Result(String guesser, String guess, int bullCount, int cowCount) {
+    public Result(String guesser, String guess, int bulls, int cows) {
         this.guesser = guesser;
         this.guess = guess;
-        this.bullCount = bullCount;
-        this.cowCount = cowCount;
+        this.bulls = bulls;
+        this.cows = cows;
     }
 
     /**
@@ -56,39 +56,39 @@ public class Result {
     }
 
     /**
-     * return the number of bulls count
+     * return the number of bulls
      *
-     * @return bullCount the number of bulls count
+     * @return bullCount the number of bulls
      */
-    public int getBullCount() {
-        return this.bullCount;
+    public int getBulls() {
+        return this.bulls;
     }
 
     /**
      * set the number of bulls
      *
-     * @param bullCount tne number of bulls count
+     * @param bulls tne number of bulls
      */
-    public void setBullCount(int bullCount) {
-        this.bullCount = bullCount;
+    public void setBulls(int bulls) {
+        this.bulls = bulls;
     }
 
     /**
-     * return the number of cows count
+     * return the number of cows
      *
-     * @return cowCount the number of cows count
+     * @return cowCount the number of cows
      */
-    public int getCowCount() {
-        return this.cowCount;
+    public int getCows() {
+        return this.cows;
     }
 
     /**
-     * set the number of cows count
+     * set the number of cows
      *
-     * @param cowCount the number of cows count
+     * @param cows the number of cows
      */
-    public void setCowCount(int cowCount) {
-        this.cowCount = cowCount;
+    public void setCows(int cows) {
+        this.cows = cows;
     }
 
     /**
@@ -116,7 +116,7 @@ public class Result {
      * @return String
      */
     public String toString() {
-        return guesser + " guessed " + guess + ", scoring " + bullCount + " bulls and " + cowCount + " cows";
+        return guesser + " guessed " + guess + ", scoring " + bulls + " bulls and " + cows + " cows";
     }
 
     /**
@@ -134,6 +134,6 @@ public class Result {
      * @return is the guess matches secret code correctly
      */
     public boolean isGuessCorrect() {
-        return (bullCount == 4);
+        return (bulls == 4);
     }
 }

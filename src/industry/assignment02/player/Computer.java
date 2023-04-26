@@ -81,7 +81,7 @@ public abstract class Computer extends Role {
 
             while (scanner.hasNext()) {
                 String word = scanner.next();
-                if (isWordVaild(word)) {
+                if (isWordleWordVaild(word)) {
                     words.add(word);
                 }
             }
@@ -101,7 +101,7 @@ public abstract class Computer extends Role {
      * @param word A Wordle word
      * @return A result of format check
      */
-    public boolean isWordVaild(String word) {
+    public boolean isWordleWordVaild(String word) {
         return word.matches("[a-zA-z]{5}$");
     }
 

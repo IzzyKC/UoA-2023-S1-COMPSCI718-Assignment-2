@@ -34,7 +34,7 @@ public class HardAI extends Computer {
         Result latestResult = getGuessResults().get(getGuessResults().size() - 1);
         for (int j = 0; j < possibleGuesses.size(); j++) {
             if (!isGuessMatchUp(possibleGuesses.get(j), latestResult.getGuess(),
-                    latestResult.getBullCount(), latestResult.getCowCount())) {
+                    latestResult.getBulls(), latestResult.getCows())) {
                 possibleGuesses.remove(j);
                 j--;
             }
