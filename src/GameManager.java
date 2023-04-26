@@ -4,8 +4,6 @@ import industry.assignment02.game.WordleFileNotFoundException;
 import industry.assignment02.player.AILevel;
 
 public class GameManager {
-    enum Command {SET_PLAYER_SECRET_CODE, PROCESS_PLAYER_GUESS, WRITE_RESULT_TO_FILE}
-
     private Game game;
 
     /**
@@ -22,30 +20,43 @@ public class GameManager {
      */
     public static void main(String[] args) {
         GameManager gm = new GameManager();
-        gm.start(false);
+        gm.start();
     }
 
     /**
-     * Prints a welcome message, prompt player for game mode and difficulty selection, initialize game setting,
-     * prompt player to guess the secret code or word, then check result
+     * Prints a welcome message, prompts player to select a game mode, starts a new game
      * and prints an exit message when the game ends.
      */
-    public void start(boolean isReset) {
+    public void start() {
         try {
-            if (!isReset) {
-                printWelcomeMessage();
-                game.setGameMode(getGameMode());
-            }
-            game.init(getGameLevel());
-            passCommand(Command.SET_PLAYER_SECRET_CODE);
-            passCommand(Command.PROCESS_PLAYER_GUESS);
-            passCommand(Command.WRITE_RESULT_TO_FILE);
+            printWelcomeMessage();
+            game.setGameMode(getGameMode());
+            startNewName();
             printExitMessage();
-        } catch (WordleFileNotFoundException e) {
+        }
+         catch (Exception e) {
+            System.out.println("[Game Manager] Error Message: " + e.getMessage());
+        }
+    }
+
+    /**
+     * starts a new game:
+     * initialize a game and sets up game parameters
+     * prompts player to enter their secret code
+     * prompts player to guess the secret code or word, then check result
+     * prompts player to save the game result to a txt file or not
+     *
+     */
+    private void startNewName(){
+        try {
+            if(GameMode.QUIT.equals(game.getGameMode())) return;
+            game.init(getGameLevel());
+            processPlayerCodeSetup();
+            processPlayerGuess();
+            processWriteToTxtFile();
+        }catch (WordleFileNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
             switchToGameLevelMenu();
-        } catch (Exception e) {
-            System.out.println("[Game Manager] Error Message: " + e.getMessage());
         }
     }
 
@@ -63,7 +74,7 @@ public class GameManager {
     private void switchToGameLevelMenu() {
         System.out.println("The system will switch to Bulls and Cows automatically.\n");
         game.setGameMode(GameMode.BULLSANDCOWS);
-        start(true);
+        startNewName();
     }
 
     /**
@@ -75,6 +86,9 @@ public class GameManager {
         printGameModeMenu();
         while (true) {
             String input = Keyboard.readInput().toLowerCase();
+
+            if(input.isBlank())
+                return GameMode.QUIT;
 
             //when user enter the actual name , return corresponding value
             switch (input) {
@@ -103,7 +117,7 @@ public class GameManager {
      * prints the game mode menu
      */
     private void printGameModeMenu() {
-        System.out.println("Please make your choice to start a game:");
+        System.out.println("Please make your choice to start a game or just press ENTER to quit:");
         System.out.println("1.Bulls and Cows");
         System.out.println("2.Wordle");
     }
@@ -255,27 +269,6 @@ public class GameManager {
         if (fileName.isBlank()) return;
         game.writeResultToTxtFile(fileName);
 
-    }
-
-    /**
-     * passes command and executes them.
-     *
-     * @param cmd The final string of a command
-     */
-    private void passCommand(Command cmd) {
-        switch (cmd) {
-            case SET_PLAYER_SECRET_CODE:
-                processPlayerCodeSetup();
-                break;
-            case PROCESS_PLAYER_GUESS:
-                processPlayerGuess();
-                break;
-            case WRITE_RESULT_TO_FILE:
-                processWriteToTxtFile();
-                break;
-            default:
-                System.out.println("No command is coming in!");
-        }
     }
 
     /**

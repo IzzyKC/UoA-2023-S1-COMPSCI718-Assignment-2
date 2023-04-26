@@ -5,5 +5,6 @@ package industry.assignment02.game;
  */
 public enum GameMode {
     BULLSANDCOWS,
-    WORDLE
+    WORDLE,
+    QUIT
 }
