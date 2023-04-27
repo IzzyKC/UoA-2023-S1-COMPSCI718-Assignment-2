@@ -69,7 +69,6 @@ public abstract class Role {
      * @param winner if this role is winner
      */
     public void setWinner(boolean winner) {
-        isWinner = winner;
+        this.isWinner = winner;
     }
-
 }

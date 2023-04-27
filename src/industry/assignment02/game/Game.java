@@ -107,14 +107,14 @@ public class Game {
             System.out.println("Turn " + (attempts + 1) + ":");
             Result playerResult = dispatchScoreGuess("You", computer.getSecretCode(), playerGuess);
             player.getGuessResults().add(playerResult);
-            player.setWinner(playerResult.isGuessCorrect());
+            player.setWinner(playerResult != null && playerResult.isGuessCorrect());
             printandCheckGuessResult(playerResult);
             if (!gameEnd && isInteractiveMode()) {
                 String computerGuess;
                 computerGuess = computer.guessPlayerCode();
                 Result computerResult = dispatchScoreGuess("Computer", player.getSecretCode(), computerGuess);
                 computer.getGuessResults().add(computerResult);
-                computer.setWinner(computerResult.isGuessCorrect());
+                computer.setWinner(computerResult != null && computerResult.isGuessCorrect());
                 printandCheckGuessResult(computerResult);
             }
             addAttempt();
