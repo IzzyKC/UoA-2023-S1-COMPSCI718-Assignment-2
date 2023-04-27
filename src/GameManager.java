@@ -137,7 +137,7 @@ public class GameManager {
         while (true) {
             String input = Keyboard.readInput().toLowerCase();
             switch (input) {
-                case "singleplayer":
+                case "beginner":
                     return AILevel.BEGINNER;
                 case "easyai":
                     return AILevel.EASYAI;
@@ -157,10 +157,10 @@ public class GameManager {
                     return AILevel.MEDIUMAI;
                 else if (choice == 4)
                     return AILevel.HARDAI;
-                System.out.println("Please enter SinglePlayer, EasyAI, MediumAI, HardAI or a number between 1 and 4");
+                System.out.println("Please enter Beginner, EasyAI, MediumAI, HardAI or a number between 1 and 4");
 
             } catch (NumberFormatException e) {
-                System.out.println("Please enter SinglePlayer, EasyAI, MediumAI, HardAI or a number between 1 and 4");
+                System.out.println("Please enter Beginner, EasyAI, MediumAI, HardAI or a number between 1 and 4");
             }
         }
     }
@@ -170,7 +170,7 @@ public class GameManager {
      */
     private void printGameLevelMenu() {
         System.out.println("Please make a choice of your game level:");
-        System.out.println("1.SinglePlayer");
+        System.out.println("1.Beginner");
         System.out.println("2.EasyAI");
         System.out.println("3.MediumAI");
         System.out.println("4.HardAI");
