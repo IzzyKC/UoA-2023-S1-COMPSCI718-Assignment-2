@@ -8,6 +8,7 @@ import java.util.List;
 public abstract class Role {
     private String secretCode;
     private List<Result> guessResults;
+    private boolean isWinner;
 
     /**
      * constructor of Role
@@ -52,4 +53,23 @@ public abstract class Role {
     public void setGuessResults(List<Result> guessResults) {
         this.guessResults = guessResults;
     }
+
+    /**
+     * Returns if this role is winner
+     *
+     * @return if this role is winner
+     */
+    public boolean isWinner() {
+        return isWinner;
+    }
+
+    /**
+     * sets if this role is winner
+     *
+     * @param winner if this role is winner
+     */
+    public void setWinner(boolean winner) {
+        isWinner = winner;
+    }
+
 }

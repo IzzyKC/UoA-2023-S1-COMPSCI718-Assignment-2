@@ -12,10 +12,10 @@ public class Result {
     /**
      * Constructor of result
      *
-     * @param guesser   A name of guesser
-     * @param guess     value of guess
-     * @param bulls value of bulls count
-     * @param cows  value of cows count
+     * @param guesser A name of guesser
+     * @param guess   value of guess
+     * @param bulls   value of bulls count
+     * @param cows    value of cows count
      */
     public Result(String guesser, String guess, int bulls, int cows) {
         this.guesser = guesser;
@@ -27,9 +27,8 @@ public class Result {
     /**
      * Constructor of result
      *
-     * @param guesser  A name of guesser
-     * @param guess    value of guess
-     *
+     * @param guesser A name of guesser
+     * @param guess   value of guess
      */
     public Result(String guesser, String guess) {
         this.guesser = guesser;

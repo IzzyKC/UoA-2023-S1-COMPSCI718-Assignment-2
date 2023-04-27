@@ -33,8 +33,7 @@ public class GameManager {
             game.setGameMode(getGameMode());
             startNewName();
             printExitMessage();
-        }
-         catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("[Game Manager] Error Message: " + e.getMessage());
         }
     }
@@ -45,16 +44,15 @@ public class GameManager {
      * prompts player to enter their secret code
      * prompts player to guess the secret code or word, then check result
      * prompts player to save the game result to a txt file or not
-     *
      */
-    private void startNewName(){
+    private void startNewName() {
         try {
-            if(GameMode.QUIT.equals(game.getGameMode())) return;
+            if (GameMode.QUIT.equals(game.getGameMode())) return;
             game.init(getGameLevel());
             processPlayerCodeSetup();
             processPlayerGuess();
             processWriteToTxtFile();
-        }catch (WordleFileNotFoundException e) {
+        } catch (WordleFileNotFoundException e) {
             System.out.println("Error: " + e.getMessage());
             switchToGameLevelMenu();
         }
@@ -87,7 +85,7 @@ public class GameManager {
         while (true) {
             String input = Keyboard.readInput().toLowerCase();
 
-            if(input.isBlank())
+            if (input.isBlank())
                 return GameMode.QUIT;
 
             //when user enter the actual name , return corresponding value

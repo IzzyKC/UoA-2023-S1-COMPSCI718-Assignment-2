@@ -107,12 +107,14 @@ public class Game {
             System.out.println("Turn " + (attempts + 1) + ":");
             Result playerResult = dispatchScoreGuess("You", computer.getSecretCode(), playerGuess);
             player.getGuessResults().add(playerResult);
+            player.setWinner(playerResult.isGuessCorrect());
             printandCheckGuessResult(playerResult);
             if (!gameEnd && isInteractiveMode()) {
                 String computerGuess;
                 computerGuess = computer.guessPlayerCode();
                 Result computerResult = dispatchScoreGuess("Computer", player.getSecretCode(), computerGuess);
                 computer.getGuessResults().add(computerResult);
+                computer.setWinner(computerResult.isGuessCorrect());
                 printandCheckGuessResult(computerResult);
             }
             addAttempt();
@@ -274,9 +276,11 @@ public class Game {
     public void writeResultToTxtFile(String fileName) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             writer.printf("%s\n", (GameMode.BULLSANDCOWS.equals(gameMode) ? "Bulls & Cows" : "Wordle") + " game result.");
+
             if (isInteractiveMode())
                 writer.printf("%s\n", "Your code: " + player.getSecretCode());
             writer.printf("%s\n", "Computer's code: " + computer.getSecretCode());
+
             for (int i = 0; i < player.getGuessResults().size(); i++) {
                 writer.print("---\n");
                 writer.printf("%s\n", "Turn " + (i + 1) + ":");
@@ -291,12 +295,12 @@ public class Game {
                 if (computerResult.isGuessCorrect())
                     writer.printf("%s\n", computerResult.getWinnerMessage());
             }
-            if (isMaxAttemptsFull() && (!player.getGuessResults().get(maxAttempts - 1).isGuessCorrect()
-                    || (isInteractiveMode() && computer.getGuessResults().size() == maxAttempts
-                    && !computer.getGuessResults().get(maxAttempts - 1).isGuessCorrect()))) {
+
+            if (!player.isWinner() && !computer.isWinner()) {
                 writer.print(">>>\n");
                 writer.printf("%s", getGameResultMessage(false));
             }
+
             System.out.println("Game Result saved successfully to " + fileName + "!");
         } catch (IOException e) {
             System.out.println("Error:　" + e.getMessage());
