@@ -116,7 +116,7 @@ public class Result {
      * @return String
      */
     public String toString() {
-        return guesser + " guessed " + guess + ", scoring " + bulls + " bulls and " + cows + " cows";
+        return guesser + " guess: " + guess + "\nResult: " + bulls + " bulls and " + cows + " cows";
     }
 
     /**
