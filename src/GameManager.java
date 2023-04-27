@@ -134,9 +134,11 @@ public class GameManager {
 
         while (true) {
             String input = Keyboard.readInput().toLowerCase();
+
+            if (input.isBlank())
+                return AILevel.BEGINNER;
+
             switch (input) {
-                case "beginner":
-                    return AILevel.BEGINNER;
                 case "easyai":
                     return AILevel.EASYAI;
                 case "mediumai":
@@ -148,17 +150,15 @@ public class GameManager {
             try {
                 int choice = Integer.parseInt(input);
                 if (choice == 1)
-                    return AILevel.BEGINNER;
-                else if (choice == 2)
                     return AILevel.EASYAI;
-                else if (choice == 3)
+                else if (choice == 2)
                     return AILevel.MEDIUMAI;
-                else if (choice == 4)
+                else if (choice == 3)
                     return AILevel.HARDAI;
-                System.out.println("Please enter Beginner, EasyAI, MediumAI, HardAI or a number between 1 and 4");
+                System.out.println("Please enter EasyAI, MediumAI, HardAI or a number between 1 and 3");
 
             } catch (NumberFormatException e) {
-                System.out.println("Please enter Beginner, EasyAI, MediumAI, HardAI or a number between 1 and 4");
+                System.out.println("Please enter EasyAI, MediumAI, HardAI or a number between 1 and 3");
             }
         }
     }
@@ -167,11 +167,11 @@ public class GameManager {
      * prints the game level menu
      */
     private void printGameLevelMenu() {
-        System.out.println("Please make a choice of your game level:");
-        System.out.println("1.Beginner");
-        System.out.println("2.EasyAI");
-        System.out.println("3.MediumAI");
-        System.out.println("4.HardAI");
+        System.out.println("If you want to play against AI, please make a choice of your game level" +
+                "\nor just press ENTER to start a single player game:");
+        System.out.println("1.EasyAI");
+        System.out.println("2.MediumAI");
+        System.out.println("3.HardAI");
     }
 
     /**
