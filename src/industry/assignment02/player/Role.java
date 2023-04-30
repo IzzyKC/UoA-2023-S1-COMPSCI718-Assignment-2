@@ -5,7 +5,7 @@ import industry.assignment02.game.Result;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Role {
+public class Role {
     private String secretCode;
     private List<Result> guessResults;
     private boolean isWinner;
