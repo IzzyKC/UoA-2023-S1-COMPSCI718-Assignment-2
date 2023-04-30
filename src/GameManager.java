@@ -1,7 +1,7 @@
 import industry.assignment02.game.Game;
 import industry.assignment02.game.GameMode;
 import industry.assignment02.game.WordleFileNotFoundException;
-import industry.assignment02.player.AILevel;
+import industry.assignment02.role.AILevel;
 
 public class GameManager {
     private Game game;

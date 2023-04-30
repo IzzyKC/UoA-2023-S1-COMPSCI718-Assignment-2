@@ -1,6 +1,6 @@
 package industry.assignment02.game;
 
-import industry.assignment02.player.*;
+import industry.assignment02.role.*;
 
 import java.io.*;
 

@@ -1,4 +1,4 @@
-package industry.assignment02.player;
+package industry.assignment02.role;
 
 import industry.assignment02.game.Result;
 

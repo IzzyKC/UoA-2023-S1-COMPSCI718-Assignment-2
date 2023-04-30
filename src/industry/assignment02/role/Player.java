@@ -1,4 +1,4 @@
-package industry.assignment02.player;
+package industry.assignment02.role;
 
 public class Player extends Role {
 

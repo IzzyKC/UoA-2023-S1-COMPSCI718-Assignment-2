@@ -1,4 +1,4 @@
-package industry.assignment02.player;
+package industry.assignment02.role;
 
 import java.util.List;
 import java.util.stream.Collectors;
