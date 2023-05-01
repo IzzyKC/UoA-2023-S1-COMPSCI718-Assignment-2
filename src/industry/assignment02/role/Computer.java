@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public abstract class Computer extends Role {
-    public final String WORDLE_FILENAME = "dictionary1.txt";
+    public final String WORDLE_FILENAME = "dictionary.txt";
     private AILevel aiLevel;
 
     /**
