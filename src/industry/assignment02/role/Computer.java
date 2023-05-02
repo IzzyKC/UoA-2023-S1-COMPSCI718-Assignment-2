@@ -86,7 +86,7 @@ public abstract class Computer extends Role {
                 }
             }
         } catch (FileNotFoundException e) {
-            throw new WordleFileNotFoundException("Something went wrong! Wordle can't start to play! " +
+            throw new WordleFileNotFoundException("Something went wrong! Wordle cannot be initialized! " +
                     "The system cannot find Wordle File: " + WORDLE_FILENAME);
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
