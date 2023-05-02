@@ -128,7 +128,7 @@ public class Result {
     }
 
     /**
-     * check if this guess is correct when bullsCount == 4
+     * check if this guess is correct when bulls Count equals to 4
      *
      * @return is the guess matches secret code correctly
      */
