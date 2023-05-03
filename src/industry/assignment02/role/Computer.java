@@ -61,9 +61,9 @@ public abstract class Computer extends Role {
     }
 
     /**
-     * returns a  digit number from 0 to 9
+     * returns a random digit from 0 to 9
      *
-     * @return A random integer number
+     * @return A random digit
      */
     public int getRandomDigit(int min, int max) {
         return (int) (Math.random() * (max - min + 1));

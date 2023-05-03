@@ -12,7 +12,7 @@ public class EasyAI extends Computer {
 
     /**
      * EasyAI guesses player's secret
-     * generates random non-repetitive 4 digits
+     * generates a random guess of non-repetitive 4 digits
      *
      * @return computer's random guess
      */

@@ -17,7 +17,7 @@ public class Game {
     }
 
     /**
-     * return the value of game mode
+     * returns the value of game mode
      *
      * @return gameMode
      */
@@ -26,7 +26,7 @@ public class Game {
     }
 
     /**
-     * set the value of game mode
+     * sets the value of game mode
      *
      * @param gameMode gameMode
      */
@@ -50,7 +50,7 @@ public class Game {
     }
 
     /**
-     * initialize a new game: set up max attempts, create a computer object, set up secret code
+     * initializes a new game: set up max attempts, create a computer object, set up secret code
      */
     public void init(AILevel level) throws WordleFileNotFoundException {
         maxAttempts = (gameMode.equals(GameMode.BULLSANDCOWS)) ? 7 : 6;
@@ -60,8 +60,8 @@ public class Game {
 
     /**
      * creates a corresponding computer object
-     * MediumAI and HardAI must create corresponding computer role
-     * otherwiese, create EasyAI
+     * MediumAI and HardAI must create the corresponding computer object
+     * otherwiese, create EasyAI object
      */
     private void initComputer(AILevel level) {
         if (AILevel.MEDIUMAI.equals(level))
@@ -73,7 +73,8 @@ public class Game {
     }
 
     /**
-     * set up computer's secret code or word
+     * sets up computer's secret code or word
+     * when wordle file is not found, then throws WordleFileNotFoundException
      */
     private void setUpComputerCode() throws WordleFileNotFoundException {
         if (computer == null) return;
@@ -85,7 +86,7 @@ public class Game {
 
 
     /**
-     * set up player's secret code
+     * sets up player's secret code
      *
      * @param playerCode A secret code entered by player
      */
@@ -94,10 +95,9 @@ public class Game {
     }
 
     /**
-     * guess opponent's secret code
-     * if player or computer guess opponent's secret code correctly or max attempts is full, then game stops and return true
-     * otherwise game continues, return false
-     * after all guesses execute successfully, attempt number plus 1
+     * guesses opponent's secret code
+     * if player or computer guess opponent's secret code correctly or max attempts is full, then game stops
+     * otherwise game continues
      *
      * @param playerGuess A guess from player
      */
@@ -107,14 +107,14 @@ public class Game {
             System.out.println("Turn " + (attempts + 1) + ":");
             Result playerResult = dispatchScoreGuess("You", computer.getSecretCode(), playerGuess);
             player.getGuessResults().add(playerResult);
-            player.setWinner(playerResult != null && playerResult.isGuessCorrect());
+            player.setWinFlag(playerResult != null && playerResult.isGuessCorrect());
             printandCheckGuessResult(playerResult);
             if (!gameEnd && isInteractiveMode()) {
                 String computerGuess;
                 computerGuess = computer.guessPlayerCode();
                 Result computerResult = dispatchScoreGuess("Computer", player.getSecretCode(), computerGuess);
                 computer.getGuessResults().add(computerResult);
-                computer.setWinner(computerResult != null && computerResult.isGuessCorrect());
+                computer.setWinFlag(computerResult != null && computerResult.isGuessCorrect());
                 printandCheckGuessResult(computerResult);
             }
             addAttempt();
@@ -128,7 +128,7 @@ public class Game {
     }
 
     /**
-     * if no one wins the game, then return the String of the game result
+     * if no one wins the game, then returns the String of the game result
      *
      * @param isPrintSecretCode needs to print secret code or not
      */
@@ -142,7 +142,7 @@ public class Game {
     }
 
     /**
-     * check if player plays against AI
+     * checks if player plays against AI
      * A player can choose to play against EASYAI, MEDIUMAI, HARDAI
      *
      * @return is a game of multi players(player vs computer)
@@ -153,7 +153,7 @@ public class Game {
     }
 
     /**
-     * print and check guess result
+     * prints and checks guess result
      * prints game result and check if bulls count number is 4, then game ends and prints winner message
      */
     private void printandCheckGuessResult(Result result) {
@@ -186,7 +186,7 @@ public class Game {
     }
 
     /**
-     * check guess result
+     * scores guess result of Bulls and Cows
      *
      * @return A result of guess
      */
@@ -216,8 +216,8 @@ public class Game {
 
     /**
      * scores the result of player's guess for wordle
-     * check bulls count first, and marks the matched char to *
-     * then check cows count from secret word after marked
+     * checks bulls count first, and marks the matched char to *
+     * then checks cows count from the marked String
      *
      * @param guesser A name of game role
      * @param target  A secret word
@@ -257,8 +257,8 @@ public class Game {
     }
 
     /**
-     * if the maximum of game tries is full, return true
-     * otherwise return false
+     * if the maximum of game tries is full, returns true
+     * otherwise returns false
      *
      * @return The maxAttempts is full or not
      */
@@ -308,7 +308,7 @@ public class Game {
     }
 
     /**
-     * check wordle guess format: five letters and contains only letters A - Z or a - z
+     * checks wordle guess format: five letters and contains only letters A - Z or a - z
      *
      * @param word A player's wordle guess
      * @return A result of format check

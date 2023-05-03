@@ -29,7 +29,7 @@ public class MediumAI extends Computer {
     }
 
     /**
-     * check if next guess already exists
+     * checks if next guess already exists
      *
      * @param guess next guess code
      * @return is next guess already exists

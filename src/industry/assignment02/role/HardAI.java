@@ -10,6 +10,7 @@ public class HardAI extends Computer {
 
     /**
      * constructor of HardAI
+     * generates all possible guesses when initializes HardAI
      *
      * @param aiLevel computer AI Level
      */
@@ -21,9 +22,9 @@ public class HardAI extends Computer {
     /**
      * HardAI guesses player's secret with HardAI guess strategy
      * First : generates a random non-repetitive 4 digits
-     * According to the latest guess result, fine next guess from possible candidates
-     * randomly picks a possible guess match up same bulls number and same cows number with the latest guess
-     * and remove other unmatched candidates
+     * According to the latest guess result, fine next possible guess from the possible candidates
+     * randomly picks a possible guess that match up same bulls and same cows with the latest guess
+     * and removes other unmatched candidates
      *
      * @return computer's random guess
      */
@@ -32,11 +33,11 @@ public class HardAI extends Computer {
         if (getGuessResults().size() == 0)
             return genRandomCode(4, false);
         Result latestResult = getGuessResults().get(getGuessResults().size() - 1);
-        for (int j = 0; j < possibleGuesses.size(); j++) {
-            if (!isGuessMatchUp(possibleGuesses.get(j), latestResult.getGuess(),
+        for (int i = 0; i < possibleGuesses.size(); i++) {
+            if (!isGuessMatchUp(possibleGuesses.get(i), latestResult.getGuess(),
                     latestResult.getBulls(), latestResult.getCows())) {
-                possibleGuesses.remove(j);
-                j--;
+                possibleGuesses.remove(i);
+                i--;
             }
         }
         return (possibleGuesses.size() > 0) ? possibleGuesses.get(getRandomDigit(0, possibleGuesses.size() - 1)) : null;
@@ -63,7 +64,7 @@ public class HardAI extends Computer {
     }
 
     /**
-     * check if possible guess match up same bulls and cows with target
+     * checks if the possible guess matches up same bulls and cows with target
      *
      * @param target target guess
      * @param guess  possible guess

@@ -66,9 +66,9 @@ public class Role {
     /**
      * sets if this role is winner
      *
-     * @param winner if this role is winner
+     * @param winFlag if this role is winner
      */
-    public void setWinner(boolean winner) {
-        this.isWinner = winner;
+    public void setWinFlag(boolean winFlag) {
+        this.isWinner = winFlag;
     }
 }

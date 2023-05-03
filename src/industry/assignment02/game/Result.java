@@ -1,7 +1,7 @@
 package industry.assignment02.game;
 
 /**
- * store check result by guess
+ * A result for each guess
  */
 public class Result {
     private String guesser;
@@ -37,7 +37,7 @@ public class Result {
 
 
     /**
-     * return the value of guess
+     * returns the value of guess
      *
      * @return value of guess
      */
@@ -46,7 +46,7 @@ public class Result {
     }
 
     /**
-     * set the value of guess
+     * sets the value of guess
      *
      * @param guess value of guess
      */
@@ -55,7 +55,7 @@ public class Result {
     }
 
     /**
-     * return the number of bulls
+     * returns the number of bulls
      *
      * @return bullCount the number of bulls
      */
@@ -64,7 +64,7 @@ public class Result {
     }
 
     /**
-     * set the number of bulls
+     * sets the number of bulls
      *
      * @param bulls tne number of bulls
      */
@@ -73,7 +73,7 @@ public class Result {
     }
 
     /**
-     * return the number of cows
+     * returns the number of cows
      *
      * @return cowCount the number of cows
      */
@@ -82,7 +82,7 @@ public class Result {
     }
 
     /**
-     * set the number of cows
+     * sets the number of cows
      *
      * @param cows the number of cows
      */
@@ -91,7 +91,7 @@ public class Result {
     }
 
     /**
-     * return the value of guesser
+     * returns the value of guesser
      *
      * @return the value of guesser
      */
@@ -101,7 +101,7 @@ public class Result {
     }
 
     /**
-     * set the value of guesser
+     * sets the value of guesser
      *
      * @param guesser the value of guesser
      */
@@ -110,9 +110,9 @@ public class Result {
     }
 
     /**
-     * return the String of guess result
+     * returns the String of guess result
      *
-     * @return String
+     * @return A string
      */
     public String toString() {
         return guesser + " guess: " + guess + "\nResult: " + bulls + " bulls and " + cows + " cows";

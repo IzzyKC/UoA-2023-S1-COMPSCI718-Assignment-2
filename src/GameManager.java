@@ -24,7 +24,7 @@ public class GameManager {
     }
 
     /**
-     * Prints a welcome message, prompts player to select a game mode, starts a new game
+     * Prints a welcome message,sets up game mode, starts a new game
      * and prints an exit message when the game ends.
      */
     public void start() {
@@ -43,7 +43,7 @@ public class GameManager {
      * initialize a game and sets up game parameters
      * prompts player to enter their secret code
      * prompts player to guess the secret code or word, then check result
-     * prompts player to save the game result to a txt file or not
+     * prompts player to save the game result to a txt file
      */
     private void startNewName() {
         try {
@@ -185,9 +185,9 @@ public class GameManager {
     }
 
     /**
-     * prompt player to enter a secret code
+     * prompts player to enter a secret code
      * Bulls and Cows : EasyAI, MediumAI and HardAI need player to enter their secret code
-     * Otherwise, computer will generate random code at the beginning of the game
+     * Otherwise, only computer can generate a random code at the beginning of the game
      *
      * @return secretCode from player
      */
@@ -208,7 +208,7 @@ public class GameManager {
 
     /**
      * processes player's Guess
-     * prompt player to enter a secret code and check if input is valid
+     * prompts player to enter a secret code and check if the input is valid
      */
     private void processPlayerGuess() {
         while (!game.isGameEnd()) {
@@ -219,8 +219,8 @@ public class GameManager {
     }
 
     /**
-     * prompt player to enter a valid guess
-     * format : non-repetitive 4 digit from 0 to 9
+     * prompts player to enter a valid guess
+     * format : non-repetitive 4 digits from 0 to 9
      */
     private String getPlayerGuess() {
         String input = "";
@@ -247,7 +247,7 @@ public class GameManager {
     }
 
     /**
-     * check if the digital code is valid
+     * checks if the digital code is valid
      *
      * @param code non-repetitive 4-digits code from 0 to 9
      * @return is code valid
