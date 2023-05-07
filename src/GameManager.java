@@ -88,7 +88,6 @@ public class GameManager {
             if (input.isBlank())
                 return GameMode.QUIT;
 
-            //when user enter the actual name , return corresponding value
             switch (input) {
                 case "bulls and cows":
                     return GameMode.BULLSANDCOWS;
