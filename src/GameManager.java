@@ -33,8 +33,10 @@ public class GameManager {
             game.setGameMode(getGameMode());
             startNewName();
             printExitMessage();
+        } catch (NullPointerException e) {
+            System.out.println("Parameters NULL Error: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("[Game Manager] Error Message: " + e.getMessage());
+            System.out.println("Game Manager start() Error: " + e.getMessage());
         }
     }
 

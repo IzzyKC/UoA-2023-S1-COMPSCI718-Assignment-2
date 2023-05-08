@@ -102,28 +102,24 @@ public class Game {
      * @param playerGuess A guess from player
      */
     public void guessSecretCodes(String playerGuess) {
-        try {
-            if (isMaxAttemptsFull()) return;
-            System.out.println("Turn " + (attempts + 1) + ":");
-            Result playerResult = dispatchScoreGuess("You", computer.getSecretCode(), playerGuess);
-            player.getGuessResults().add(playerResult);
-            player.setWinFlag(playerResult != null && playerResult.isGuessCorrect());
-            printandCheckGuessResult(playerResult);
-            if (!gameEnd && isInteractiveMode()) {
-                String computerGuess;
-                computerGuess = computer.guessPlayerCode();
-                Result computerResult = dispatchScoreGuess("Computer", player.getSecretCode(), computerGuess);
-                computer.getGuessResults().add(computerResult);
-                computer.setWinFlag(computerResult != null && computerResult.isGuessCorrect());
-                printandCheckGuessResult(computerResult);
-            }
-            addAttempt();
-            if (isMaxAttemptsFull() && !gameEnd) {
-                setGameEnd(true);
-                System.out.println(getGameResultMessage(true));
-            }
-        } catch (Exception e) {
-            System.out.println("[Guess Secret Code] Error: " + e.getMessage());
+        if (isMaxAttemptsFull()) return;
+        System.out.println("Turn " + (attempts + 1) + ":");
+        Result playerResult = dispatchScoreGuess("You", computer.getSecretCode(), playerGuess);
+        player.getGuessResults().add(playerResult);
+        player.setWinFlag(playerResult != null && playerResult.isGuessCorrect());
+        printandCheckGuessResult(playerResult);
+        if (!gameEnd && isInteractiveMode()) {
+            String computerGuess;
+            computerGuess = computer.guessPlayerCode();
+            Result computerResult = dispatchScoreGuess("Computer", player.getSecretCode(), computerGuess);
+            computer.getGuessResults().add(computerResult);
+            computer.setWinFlag(computerResult != null && computerResult.isGuessCorrect());
+            printandCheckGuessResult(computerResult);
+        }
+        addAttempt();
+        if (isMaxAttemptsFull() && !gameEnd) {
+            setGameEnd(true);
+            System.out.println(getGameResultMessage(true));
         }
     }
 
@@ -191,27 +187,24 @@ public class Game {
      * @return A result of guess
      */
     private Result scoreBullsAndCowsResult(String guesser, String secretCode, String guess) {
-        try {
-            if (secretCode == null || secretCode.isBlank())
-                throw new NullPointerException(guesser + " secretCode is NULL!");
-            if (guess == null || guess.isBlank())
-                throw new NullPointerException(guesser + " guess is NULL!");
 
-            int bulls = 0, cows = 0;
+        if (secretCode == null || secretCode.isBlank())
+            throw new NullPointerException(guesser.replace("You", "Your") + " secretCode is NULL!");
 
-            for (int i = 0; i < guess.length(); i++) {
-                int index = secretCode.indexOf(guess.charAt(i));
-                if (index == i)
-                    bulls++;
-                else if (index >= 0)
-                    cows++;
-            }
+        if (guess == null || guess.isBlank())
+            throw new NullPointerException(guesser.replace("You", "Your") + " guess is NULL!");
 
-            return new Result(guesser, guess, bulls, cows);
-        } catch (Exception e) {
-            System.out.println("[ScoreBulls&CowsResult] Error: " + e.getMessage());
+        int bulls = 0, cows = 0;
+
+        for (int i = 0; i < guess.length(); i++) {
+            int index = secretCode.indexOf(guess.charAt(i));
+            if (index == i)
+                bulls++;
+            else if (index >= 0)
+                cows++;
         }
-        return null;
+
+        return new Result(guesser, guess, bulls, cows);
     }
 
     /**
@@ -225,35 +218,32 @@ public class Game {
      * @return A result of player's guess
      */
     private Result scoreWordleResult(String guesser, String target, String guess) {
-        try {
-            if (target == null || target.isBlank())
-                throw new NullPointerException("Wordle's secret word is NULL!");
-            if (guess == null || guess.isBlank())
-                throw new NullPointerException("Player's Wordle guess is NULL!");
 
-            int bulls = 0, cows = 0;
+        if (target == null || target.isBlank())
+            throw new NullPointerException("Wordle's secret word is NULL!");
 
-            Result result = new Result(guesser, guess);
+        if (guess == null || guess.isBlank())
+            throw new NullPointerException("Player's Wordle guess is NULL!");
 
-            for (int i = 0; i < target.length(); i++) {
-                if (target.toLowerCase().charAt(i) == guess.toLowerCase().charAt(i)) {
-                    bulls++;
-                    target = target.substring(0, i) + "*" + target.substring(i + 1);
-                }
+        int bulls = 0, cows = 0;
+
+        Result result = new Result(guesser, guess);
+
+        for (int i = 0; i < target.length(); i++) {
+            if (target.toLowerCase().charAt(i) == guess.toLowerCase().charAt(i)) {
+                bulls++;
+                target = target.substring(0, i) + "*" + target.substring(i + 1);
             }
-            result.setBulls(bulls);
-
-            for (int i = 0; i < target.length(); i++) {
-                if (target.toLowerCase().contains(String.valueOf(guess.toLowerCase().charAt(i))))
-                    cows++;
-            }
-            result.setCows(cows);
-
-            return result;
-        } catch (Exception e) {
-            System.out.println("[scoreWordleResult] Error: " + e.getMessage());
         }
-        return null;
+        result.setBulls(bulls);
+
+        for (int i = 0; i < target.length(); i++) {
+            if (target.toLowerCase().contains(String.valueOf(guess.toLowerCase().charAt(i))))
+                cows++;
+        }
+        result.setCows(cows);
+
+        return result;
     }
 
     /**
