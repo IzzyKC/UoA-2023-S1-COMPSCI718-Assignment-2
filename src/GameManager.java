@@ -49,7 +49,7 @@ public class GameManager {
      */
     private void startNewName() {
         try {
-            if (GameMode.QUIT.equals(game.getGameMode())) return;
+            if (GameMode.QUIT == game.getGameMode()) return;
             game.init(getGameLevel());
             processPlayerCodeSetup();
             processPlayerGuess();
@@ -128,7 +128,7 @@ public class GameManager {
      * @return String A gameLevel from player's choice
      */
     private AILevel getGameLevel() {
-        if (GameMode.WORDLE.equals(game.getGameMode()))
+        if (GameMode.WORDLE == game.getGameMode())
             return AILevel.WORDLE;
 
         printGameLevelMenu();

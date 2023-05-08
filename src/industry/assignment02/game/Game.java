@@ -53,7 +53,7 @@ public class Game {
      * initializes a new game: set up max attempts, create a computer object, set up secret code
      */
     public void init(AILevel level) throws WordleFileNotFoundException {
-        maxAttempts = (gameMode.equals(GameMode.BULLSANDCOWS)) ? 7 : 6;
+        maxAttempts = (gameMode == GameMode.BULLSANDCOWS) ? 7 : 6;
         initComputer(level);
         setUpComputerCode();
     }
@@ -64,9 +64,9 @@ public class Game {
      * otherwiese, create EasyAI object
      */
     private void initComputer(AILevel level) {
-        if (AILevel.MEDIUMAI.equals(level))
+        if (AILevel.MEDIUMAI == level)
             computer = new MediumAI(level);
-        else if (AILevel.HARDAI.equals(level))
+        else if (AILevel.HARDAI == level)
             computer = new HardAI(level);
         else
             computer = new EasyAI(level);
@@ -78,7 +78,7 @@ public class Game {
      */
     private void setUpComputerCode() throws WordleFileNotFoundException {
         if (computer == null) return;
-        if (this.gameMode.equals(GameMode.BULLSANDCOWS))
+        if (this.gameMode == GameMode.BULLSANDCOWS)
             computer.genComputerCode();
         else
             computer.genWordleCode();
@@ -145,7 +145,7 @@ public class Game {
      */
     public boolean isInteractiveMode() {
         AILevel level = computer.getAiLevel();
-        return AILevel.EASYAI.equals(level) || AILevel.MEDIUMAI.equals(level) || AILevel.HARDAI.equals(level);
+        return AILevel.EASYAI == level || AILevel.MEDIUMAI == level || AILevel.HARDAI == level;
     }
 
     /**
