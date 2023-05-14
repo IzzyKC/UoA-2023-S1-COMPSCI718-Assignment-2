@@ -4,7 +4,7 @@ package industry.assignment02.game;
  * A result for each guess
  */
 public class Result {
-    private String guesser;
+    private final String guesser;
     private String guess;
     private int bulls;
     private int cows;
@@ -88,25 +88,6 @@ public class Result {
      */
     public void setCows(int cows) {
         this.cows = cows;
-    }
-
-    /**
-     * returns the value of guesser
-     *
-     * @return the value of guesser
-     */
-
-    public String getGuesser() {
-        return guesser;
-    }
-
-    /**
-     * sets the value of guesser
-     *
-     * @param guesser the value of guesser
-     */
-    public void setGuesser(String guesser) {
-        this.guesser = guesser;
     }
 
     /**
