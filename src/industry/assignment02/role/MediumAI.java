@@ -1,5 +1,7 @@
 package industry.assignment02.role;
 
+import industry.assignment02.game.Result;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,7 @@ public class MediumAI extends Computer {
      * @return is next guess already exists
      */
     private boolean isRepeatGuess(String guess) {
-        List repeatGuess = getGuessResults().stream()
+        List<Result> repeatGuess = getGuessResults().stream()
                 .filter(result -> result.getGuess().equals(guess))
                 .collect(Collectors.toList());
         return repeatGuess.size() > 0;
