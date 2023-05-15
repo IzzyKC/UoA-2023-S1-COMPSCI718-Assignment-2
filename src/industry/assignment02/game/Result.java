@@ -116,4 +116,5 @@ public class Result {
     public boolean isGuessCorrect() {
         return (bulls == 4);
     }
+
 }
